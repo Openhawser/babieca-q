@@ -18,8 +18,6 @@ defmodule Babieca.MixProject do
   defp deps do
     [
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:redix, "~> 1.1"},
-      {:castore, ">= 0.0.0"}
     ]
   end
 end
