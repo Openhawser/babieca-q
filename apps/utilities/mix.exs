@@ -1,9 +1,9 @@
-defmodule Core.MixProject do
+defmodule Utilities.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :core,
+      app: :utilities,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -30,6 +30,4 @@ defmodule Core.MixProject do
       # {:sibling_app_in_umbrella, in_umbrella: true}
     ]
   end
-
-
 end
