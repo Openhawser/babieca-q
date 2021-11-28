@@ -16,6 +16,19 @@ defmodule Core.MessageStoreTest do
     assert  not Process.alive?(pid)
   end
 
+  test "create Topic exist" do
+    MessageStore.start("Test")
+    assert MessageStore.start("Test") == {:error, "The topic Test already exists"}
+  end
+
+  test "stop Topic not exist" do
+    assert MessageStore.stop("Test") == {:error, "The topic Test not exists"}
+  end
+
+  test "topic name incorrect" do
+    {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"} == MessageStore.start("Test Test")
+  end
+
   test "create multiples process and stop " do
     MessageStore.start("Test1")
     MessageStore.start("Test2")
