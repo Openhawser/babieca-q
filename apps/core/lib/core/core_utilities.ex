@@ -1,15 +1,15 @@
 defmodule Core.Utilities do
   @moduledoc """
-  Módulo que contiene las funciones utilitarias del modulo core
+  Module that contains the utilitarian functions of the core module
   """
 
   @doc """
-  Validación de nombres, solamente válidos letras, números y _ o -
+  Validation of names, only valid letters, numbers and _ or -
   """
-  @spec valid?(String.t()) :: boolean
-  def valid?(name)
-  def valid?(name) when not is_bitstring(name), do: false
-  def valid?(name) do
+  @spec topic_name_valid?(String.t()) :: boolean
+  def topic_name_valid?(name)
+  def topic_name_valid?(name) when not is_bitstring(name), do: false
+  def topic_name_valid?(name) do
     name
     |> String.downcase()
     |> String.graphemes()
@@ -18,15 +18,15 @@ defmodule Core.Utilities do
   end
 
   @doc """
-  Validate if the topic has a process
+  Validate if the topic has a storage
   """
-  @spec exist_topic_process?(String.t()) :: boolean
-  def exist_topic_process?(topic_name)
-  def exist_topic_process?(topic_name) when not is_bitstring(topic_name), do: false
-  def exist_topic_process?(topic_name) do
-    name_process = String.to_atom("babieca-topic-#{topic_name}-messages")
-    case Process.whereis(name_process) do
-      nil -> false
+  @spec exist_topic_storage?(String.t()) :: boolean
+  def exist_topic_storage?(topic_name)
+  def exist_topic_storage?(topic_name) when not is_bitstring(topic_name), do: false
+  def exist_topic_storage?(topic_name) do
+    name_storage = String.to_atom("babieca-topic-#{topic_name}-messages")
+    case :ets.whereis(name_storage) do
+      :undefined -> false
       _ -> true
     end
   end
@@ -34,8 +34,8 @@ defmodule Core.Utilities do
   @doc """
   Create atom topic name
   """
-  @spec topic_name_process(String.t()) :: atom
-  def topic_name_process(topic_name) do
+  @spec topic_name_storage(String.t()) :: atom
+  def topic_name_storage(topic_name) do
     String.to_atom("babieca-topic-#{topic_name}-messages")
   end
 

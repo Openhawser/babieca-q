@@ -1,9 +1,8 @@
 defmodule Core.MessageStore do
-  use GenServer
   import Core.Utilities, only: [
-    valid?: 1,
-    exist_topic_process?: 1,
-    topic_name_process: 1,
+    topic_name_valid?: 1,
+    exist_topic_storage?: 1,
+    topic_name_storage: 1,
     valid_message?: 1]
 
   @moduledoc """
@@ -13,9 +12,6 @@ defmodule Core.MessageStore do
      The messages will be stored in a table ets {non-negative integer as key, %{msg: str, timestamp: ~ D []}}
   """
 
-  @impl true
-  @spec init(any()) :: Tuple
-  def init(stack), do: {:ok, stack}
 
   @doc """
     Creator of the process in charge of storing messages.
@@ -34,12 +30,11 @@ defmodule Core.MessageStore do
   @spec start(String.t()) :: {:ok | :error, String.t()}
   def start(topic_name) do
     cond do
-      not valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"}
-      exist_topic_process?(topic_name) -> {:error, "The topic #{topic_name} already exists"}
-      true -> name_process = topic_name_process(topic_name)
+      not topic_name_valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"}
+      exist_topic_storage?(topic_name) -> {:error, "The storage of topic #{topic_name} already exists"}
+      true -> name_process = topic_name_storage(topic_name)
               :ets.new(name_process, [:ordered_set, :protected, :named_table, read_concurrency: true])
-              GenServer.start_link(__MODULE__, [], name: name_process)
-              {:ok, "The process #{name_process} has been create"}
+              {:ok, "The storage #{name_process} has been create"}
     end
   end
 
@@ -62,13 +57,11 @@ defmodule Core.MessageStore do
   @spec stop(String.t()) :: {:ok | :error, String.t()}
   def stop(topic_name) do
     cond do
-      not valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters, numbers, _ or -"}
-      not exist_topic_process?(topic_name) -> {:error, "The topic #{topic_name} not exists"}
-      true -> name_process = topic_name_process(topic_name)
+      not topic_name_valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters, numbers, _ or -"}
+      not exist_topic_storage?(topic_name) -> {:error, "The topic #{topic_name} not exists"}
+      true -> name_process = topic_name_storage(topic_name)
               :ets.delete(name_process)
-              pid = GenServer.whereis(name_process)
-              GenServer.stop(pid)
-              {:ok, "The process #{name_process} has been close"}
+              {:ok, "The storage #{name_process} has been close"}
     end
   end
 
@@ -94,13 +87,13 @@ defmodule Core.MessageStore do
   @spec add_message(String.t(), message) :: {:ok | :error, String.t()}
   def add_message(topic_name, message)
   def add_message(topic_name, message) do
-    table = :ets.whereis(topic_name_process(topic_name))
+    table_name = topic_name_storage(topic_name)
     if valid_message?(message) do
-      last_index = :ets.last(table)
+      last_index = :ets.last(table_name)
       result =
         case last_index do
-          :"$end_of_table" -> :ets.insert_new(table, {1, message})
-          _ -> :ets.insert_new(table, {last_index + 1, message})
+          :"$end_of_table" -> :ets.insert_new(table_name, {1, message})
+          _ -> :ets.insert_new(table_name, {last_index + 1, message})
         end
       case result do
         true ->
@@ -112,4 +105,28 @@ defmodule Core.MessageStore do
       {:error, "Message is invalid"}
     end
   end
+
+  @doc"""
+    Function to get the following message to the message_id messages of a topic.
+
+  ## Parameters
+
+      - topic_name: String with the name of the topic
+
+      - message_id: message id, integer
+
+  ## Return
+
+      - {:ok ,{id_message, message}} | {:finished, "Don't have more messages"}
+
+  """
+  @spec get_next_messages(String.t(), integer) :: {:ok, list({integer, message})} | {:finished, String.t()}
+  def get_next_messages(topic_name, message_id) do
+    result = :ets.lookup(topic_name_storage(topic_name), message_id + 1)
+    case result do
+      [] -> {:finished, "Don't have more messages"}
+      [msg] -> {:ok, msg}
+    end
+  end
+
 end

@@ -12,13 +12,13 @@ defmodule CoreUtilitiesTest do
   end
 
   test "validate_name not string" do
-    refute Utilities.valid?(1)
-    refute Utilities.valid?(:valor)
+    refute Utilities.topic_name_valid?(1)
+    refute Utilities.topic_name_valid?(:valor)
   end
 
   test "validate_name string values" do
-    refute Utilities.valid?("test test")
-    refute Utilities.valid?("test test*")
-    assert Utilities.valid?("test_test")
+    refute Utilities.topic_name_valid?("test test")
+    refute Utilities.topic_name_valid?("test test*")
+    assert Utilities.topic_name_valid?("test_test")
   end
 end
