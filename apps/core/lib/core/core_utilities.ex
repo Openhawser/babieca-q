@@ -4,7 +4,7 @@ defmodule Core.Utilities do
   """
 
   @doc """
-  Validación de nombres, solamente válidos letras, numeros y _ o -
+  Validación de nombres, solamente válidos letras, números y _ o -
   """
   @spec valid?(String.t()) :: boolean
   def valid?(name)
@@ -18,17 +18,34 @@ defmodule Core.Utilities do
   end
 
   @doc """
-Validate if the topic has a process
-"""
+  Validate if the topic has a process
+  """
   @spec exist_topic_process?(String.t()) :: boolean
   def exist_topic_process?(topic_name)
   def exist_topic_process?(topic_name) when not is_bitstring(topic_name), do: false
   def exist_topic_process?(topic_name) do
     name_process = String.to_atom("babieca-topic-#{topic_name}-messages")
-     case Process.whereis(name_process) do
-       nil -> false
-       _ -> true
+    case Process.whereis(name_process) do
+      nil -> false
+      _ -> true
     end
   end
 
+  @doc """
+  Create atom topic name
+  """
+  @spec topic_name_process(String.t()) :: atom
+  def topic_name_process(topic_name) do
+    String.to_atom("babieca-topic-#{topic_name}-messages")
+  end
+
+  @doc """
+    validate if the message is correct
+    %{msg: str, timestamp: non negative integer}
+  """
+  @spec valid_message?(Core.MessageStore.message) :: boolean
+  def valid_message?(message)
+  def valid_message?(%{msg: text, timestamp: value}) when is_bitstring(text) and is_number(value) and value > 0,
+      do: true
+  def valid_message?(_), do: false
 end

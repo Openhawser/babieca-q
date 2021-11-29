@@ -2,6 +2,7 @@ defmodule Core.MessageStoreTest do
   use ExUnit.Case
 
   alias Core.MessageStore, as: MessageStore
+  alias Core.Utilities, as: Utilities
 
 
   test "module exists" do
@@ -41,4 +42,28 @@ defmodule Core.MessageStoreTest do
     assert  not Process.alive?(pid2)
   end
 
+  test "create table ets and delete" do
+    MessageStore.start("Test")
+    assert :ets.whereis(:"babieca-topic-Test-messages") != :undefined
+    MessageStore.stop("Test")
+    assert :ets.whereis(:"babieca-topic-Test-messages") == :undefined
+  end
+
+  test "store messages" do
+    topic = "Test"
+    MessageStore.start(topic)
+    table = :ets.whereis(Utilities.topic_name_process(topic))
+    result = MessageStore.add_message(topic, %{msg: "First message", timestamp: :os.system_time(:millisecond)})
+    assert result == {:ok, "The message has been insert in #{topic}"}
+    [{index, %{msg: text, timestamp: _}}] = :ets.tab2list(table)
+    assert index == 1 and text == "First message"
+    MessageStore.add_message(topic, %{msg: "Second message", timestamp: :os.system_time(:millisecond)})
+    assert length(:ets.tab2list(table)) == 2
+    assert :ets.last(table) == 2
+    [{2, %{msg: text, timestamp: _}}] = :ets.lookup(table, 2)
+    assert text == "Second message"
+    assert {:error, "Message is invalid"} == MessageStore.add_message(topic, %{msg: 1, timestamp: 1})
+    assert {:error, "Message is invalid"} == MessageStore.add_message(topic, %{msg: 1, timestamp: -1})
+    assert {:error, "Message is invalid"} == MessageStore.add_message(topic, "")
+  end
 end
