@@ -76,7 +76,7 @@ defmodule Core.MessageStoreTest do
     MessageStore.stop(topic)
   end
 
-  test "get messages" do
+  test "next messages" do
     topic = "Test"
     proces_name = Utilities.key_topic_name(topic)
     MessageStore.start(topic)
@@ -84,15 +84,9 @@ defmodule Core.MessageStoreTest do
     |> Enum.map(
          fn x -> MessageStore.add_message(topic, %{msg: "#{x} message", timestamp: :os.system_time(:millisecond)})end
        )
+    key = Agent.get(proces_name, &(&1))
+    assert [] == MessageStore.get_messages(topic, key)
 
-    message8 = 10 - 8
-    {:ok, result} = MessageStore.get_messages(topic, Enum.at(Agent.get(proces_name, &(&1)), message8))
-    assert result |> Enum.map(fn {_, value} -> value.msg end)  == 9..10 |> Enum.map(fn x-> "#{x} message" end)
-    message3 = 10 - 3
-    {:ok, result} = MessageStore.get_messages(topic, Enum.at(Agent.get(proces_name, &(&1)), message3))
-    assert result |> Enum.map(fn {_, value} -> value.msg end)  == 4..10 |> Enum.map(fn x-> "#{x} message" end)
-    {:ok, result} = MessageStore.get_messages(topic, nil)
-    assert result |> Enum.map(fn {_, value} -> value.msg end)  == 1..10 |> Enum.map(fn x-> "#{x} message" end)
     MessageStore.stop(topic)
   end
 end

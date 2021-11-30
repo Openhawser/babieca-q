@@ -20,7 +20,13 @@ defmodule Babieca.MixProject do
     [
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:earmark, "~> 1.2", only: :dev},
-      {:ex_doc, "~> 0.19", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev},
+    ]
+  end
+
+  def application do
+    [
+      extra_applications: [:logger]
     ]
   end
 end
