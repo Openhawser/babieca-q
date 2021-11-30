@@ -87,12 +87,18 @@ defmodule Core.MessageStoreTest do
 
     message8 = 10 - 8
     {:ok, result} = MessageStore.get_messages(topic, Enum.at(Agent.get(proces_name, &(&1)), message8))
-    assert result |> Enum.map(fn {_, value} -> value.msg end)  == 9..10 |> Enum.map(fn x-> "#{x} message" end)
+    assert result
+           |> Enum.map(fn {_, value} -> value.msg end) == 9..10
+                                                          |> Enum.map(fn x -> "#{x} message" end)
     message3 = 10 - 3
     {:ok, result} = MessageStore.get_messages(topic, Enum.at(Agent.get(proces_name, &(&1)), message3))
-    assert result |> Enum.map(fn {_, value} -> value.msg end)  == 4..10 |> Enum.map(fn x-> "#{x} message" end)
+    assert result
+           |> Enum.map(fn {_, value} -> value.msg end) == 4..10
+                                                          |> Enum.map(fn x -> "#{x} message" end)
     {:ok, result} = MessageStore.get_messages(topic, nil)
-    assert result |> Enum.map(fn {_, value} -> value.msg end)  == 1..10 |> Enum.map(fn x-> "#{x} message" end)
+    assert result
+           |> Enum.map(fn {_, value} -> value.msg end) == 1..10
+                                                          |> Enum.map(fn x -> "#{x} message" end)
     MessageStore.stop(topic)
   end
 end

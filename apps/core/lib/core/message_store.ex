@@ -142,10 +142,12 @@ defmodule Core.MessageStore do
                             h
                   end
                 )
-    cond do
-      result == [] -> {:finished, "Don't have more messages"}
-      true -> {:ok, result}
+    if result == [] do
+      {:finished, "Don't have more messages"}
+    else
+      {:ok, result}
     end
   end
+end
 
 end
