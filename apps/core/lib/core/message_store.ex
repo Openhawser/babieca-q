@@ -11,7 +11,7 @@ defmodule Core.MessageStore do
 
   @moduledoc """
   Module that creates storage by topic, for them what it does is create a genserver and register it
-     as babieca-topic- {topic name} -messages
+     as babieca-topic-{topic name}-messages
 
      The messages will be stored in a table ets {non-negative integer as key, %{msg: str, timestamp: ~ D []}}
   """
@@ -127,6 +127,7 @@ defmodule Core.MessageStore do
 
   """
   @spec get_messages(String.t(), integer) :: {:ok, list({integer, message})} | {:finished, String.t()}
+  def get_messages(_, nil), do: {:ok, []}
   def get_messages(topic_name, message_key) do
     name_process = key_topic_name(topic_name)
     keys = Agent.get(
@@ -148,6 +149,83 @@ defmodule Core.MessageStore do
       {:ok, result}
     end
   end
-end
 
+  @doc """
+  Funtion to get the last id of message
+
+
+  ## Parameters
+
+      - topic_name: String with the name of the topic
+
+
+  ## Return
+
+      - UIID4 of last message or nil if the list is empty
+
+  """
+  @spec get_id_last_message(String.t()) :: String.t() | nil
+  def get_id_last_message(topic_name) do
+    Agent.get(
+      key_topic_name(topic_name),
+      fn x -> if x == [] do
+                nil
+              else
+                List.first(x)
+              end
+      end
+    )
+  end
+
+  @doc """
+  Funtion to get the first id of message
+
+  ## Parameters
+
+      - topic_name: String with the name of the topic
+
+
+  ## Return
+
+      - UIID4 of first message or nil if the list is empty
+
+  """
+  @spec get_id_first_message(String.t()) :: String.t() | nil
+  def get_id_first_message(topic_name) do
+    Agent.get(
+      key_topic_name(topic_name),
+      fn x -> if x == [] do
+                nil
+              else
+                List.last(x)
+              end
+      end
+    )
+  end
+
+  @doc """
+  Funtion to get the message with the id
+
+  ## Parameters
+
+      - topic_name: String with the name of the topic
+
+      - id: UUID4 of message
+
+
+  ## Return
+
+      - {:ok, message} or {:error, "Not exist"}
+
+  """
+  @spec get_message_with_id(String.t(), String.t()) :: {:ok, message} | {:error, String.t()}
+  def get_message_with_id(topic_name, id) do
+    value = :ets.lookup(key_topic_name(topic_name), id)
+    if value != [] do
+      [{_, msg}] = value
+      {:ok, msg}
+    else
+      {:error, "Not exist"}
+    end
+  end
 end

@@ -1,4 +1,4 @@
-defmodule Core.OrchestratorStore do
+defmodule Core.Orchestrator do
   @moduledoc false
 
 end

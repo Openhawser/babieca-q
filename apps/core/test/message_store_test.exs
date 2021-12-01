@@ -76,7 +76,7 @@ defmodule Core.MessageStoreTest do
     MessageStore.stop(topic)
   end
 
-  test "get messages" do
+  test "get messages and get_id.." do
     topic = "Test"
     proces_name = Utilities.key_topic_name(topic)
     MessageStore.start(topic)
@@ -95,10 +95,23 @@ defmodule Core.MessageStoreTest do
     assert result
            |> Enum.map(fn {_, value} -> value.msg end) == 4..10
                                                           |> Enum.map(fn x -> "#{x} message" end)
-    {:ok, result} = MessageStore.get_messages(topic, nil)
-    assert result
-           |> Enum.map(fn {_, value} -> value.msg end) == 1..10
-                                                          |> Enum.map(fn x -> "#{x} message" end)
+
+    assert {:ok, []} = MessageStore.get_messages(topic, nil)
+
+
+    {:ok, value} = MessageStore.get_message_with_id(topic, MessageStore.get_id_last_message(topic))
+    assert value.msg == "10 message"
+    {:ok, value} = MessageStore.get_message_with_id(topic, MessageStore.get_id_first_message(topic))
+    assert value.msg == "1 message"
     MessageStore.stop(topic)
   end
+  test "get messages and get_id.. empty" do
+    topic = "Test"
+    MessageStore.start(topic)
+    assert {:ok, []} = MessageStore.get_messages(topic, nil)
+    assert MessageStore.get_id_last_message(topic) == nil
+    assert MessageStore.get_id_first_message(topic) == nil
+    assert MessageStore.get_message_with_id(topic," ") == {:error, "Not exist"}
+  end
+
 end
