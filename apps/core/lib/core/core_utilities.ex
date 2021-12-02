@@ -24,7 +24,7 @@ defmodule Core.Utilities do
   def exist_topic_storage?(topic_name)
   def exist_topic_storage?(topic_name) when not is_bitstring(topic_name), do: false
   def exist_topic_storage?(topic_name) do
-    name_storage = key_topic_name(topic_name)
+    name_storage = key_topic_message_name(topic_name)
     case :ets.whereis(name_storage) do
       :undefined -> false
       _ -> true
@@ -32,24 +32,49 @@ defmodule Core.Utilities do
   end
 
   @doc """
+  validate si exist the agent that save the messages
+  """
+  @spec exist_storage_message_agent?(String.t()) :: boolean
+  def exist_storage_message_agent?(topic_name) when not is_bitstring(topic_name), do: false
+  def exist_storage_message_agent?(topic_name) do
+    topic_name
+    |> key_topic_message_name()
+    |> exit_agent?()
+  end
 
+  @doc """
+  validate si exist the agent that save the user in the topic, and his position
   """
   @spec exist_topic_agent?(String.t()) :: boolean
   def exist_topic_agent?(topic_name) when not is_bitstring(topic_name), do: false
   def exist_topic_agent?(topic_name) do
-    name_storage = key_topic_name(topic_name)
-    case Process.whereis(name_storage) do
-      nil -> false
-      _ -> true
+    topic_name
+    |> key_topic_name()
+    |> exit_agent?()
+  end
+
+  defp exit_agent?(name) do
+    if Process.whereis(name) == nil do
+      false
+    else
+      true
     end
   end
 
   @doc """
-  Create atom topic name
+  Create atom topic name to messages agent or messages ets
+  """
+  @spec key_topic_message_name(String.t()) :: atom
+  def key_topic_message_name(topic_name) do
+    String.to_atom("babieca-topic-#{topic_name}-messages")
+  end
+
+  @doc """
+  Create atom topic name agent or ets topic
   """
   @spec key_topic_name(String.t()) :: atom
   def key_topic_name(topic_name) do
-    String.to_atom("babieca-topic-#{topic_name}-messages")
+    String.to_atom("babieca-topic-#{topic_name}")
   end
 
   @doc """

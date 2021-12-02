@@ -21,4 +21,11 @@ defmodule CoreUtilitiesTest do
     refute Utilities.topic_name_valid?("test test*")
     assert Utilities.topic_name_valid?("test_test")
   end
+
+  test "key_topic_name create" do
+    assert Utilities.exist_topic_agent?(1) == false
+    assert Utilities.exist_topic_agent?("name") == false
+    Agent.start_link(fn -> [] end, name: :"babieca-topic-Test")
+    assert Utilities.exist_topic_agent?("Test") == true
+  end
 end

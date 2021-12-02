@@ -2,8 +2,8 @@ defmodule Core.MessageStore do
   import Core.Utilities, only: [
     topic_name_valid?: 1,
     exist_topic_storage?: 1,
-    exist_topic_agent?: 1,
-    key_topic_name: 1,
+    key_topic_message_name: 1,
+    exist_storage_message_agent?: 1,
     valid_message?: 1]
 
   use Agent
@@ -36,12 +36,12 @@ defmodule Core.MessageStore do
     cond do
       not topic_name_valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"}
       exist_topic_storage?(topic_name) -> {:error, "The storage of topic #{topic_name} already exists"}
-      exist_topic_agent?(topic_name) -> {:error, "The Agent of topic #{topic_name} already exists"}
-      true -> name_process = key_topic_name(topic_name)
+      exist_storage_message_agent?(topic_name) -> {:error, "The Agent of topic #{topic_name} already exists"}
+      true -> name_process = key_topic_message_name(topic_name)
               Agent.start_link(fn -> [] end, name: name_process)
               :ets.new(name_process, [:duplicate_bag, :protected, :named_table, read_concurrency: true])
               Logger.info("The storage #{name_process} has been create")
-              :ok
+              {:ok, "The storage #{name_process} has been create"}
     end
   end
 
@@ -65,13 +65,13 @@ defmodule Core.MessageStore do
   def stop(topic_name) do
     cond do
       not topic_name_valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters, numbers, _ or -"}
-      true -> name_process = key_topic_name(topic_name)
+      true -> name_process = key_topic_message_name(topic_name)
               if exist_topic_storage?(topic_name) do
                 :ets.delete(name_process)
               else
                 Logger.warning("The topic #{topic_name} storage not exists", [error_code: :pc_load_letter])
               end
-              if exist_topic_agent?(topic_name) do
+              if exist_storage_message_agent?(topic_name) do
                 Agent.stop(name_process)
               else
                 Logger.warning("The Agent of topic #{topic_name} not exists", [error_code: :pc_load_letter])
@@ -103,7 +103,7 @@ defmodule Core.MessageStore do
   def add_message(topic_name, message)
   def add_message(topic_name, message) do
     if valid_message?(message) do
-      name_process = key_topic_name(topic_name)
+      name_process = key_topic_message_name(topic_name)
       key = UUID.uuid4()
       :ets.insert_new(name_process, {key, message})
       Agent.update(name_process, &([key | &1]))
@@ -129,7 +129,7 @@ defmodule Core.MessageStore do
   @spec get_messages(String.t(), integer) :: {:ok, list({integer, message})} | {:finished, String.t()}
   def get_messages(_, nil), do: {:ok, []}
   def get_messages(topic_name, message_key) do
-    name_process = key_topic_name(topic_name)
+    name_process = key_topic_message_name(topic_name)
     keys = Agent.get(
              name_process,
              &(
@@ -167,7 +167,7 @@ defmodule Core.MessageStore do
   @spec get_id_last_message(String.t()) :: String.t() | nil
   def get_id_last_message(topic_name) do
     Agent.get(
-      key_topic_name(topic_name),
+      key_topic_message_name(topic_name),
       fn x -> if x == [] do
                 nil
               else
@@ -193,7 +193,7 @@ defmodule Core.MessageStore do
   @spec get_id_first_message(String.t()) :: String.t() | nil
   def get_id_first_message(topic_name) do
     Agent.get(
-      key_topic_name(topic_name),
+      key_topic_message_name(topic_name),
       fn x -> if x == [] do
                 nil
               else
@@ -220,7 +220,7 @@ defmodule Core.MessageStore do
   """
   @spec get_message_with_id(String.t(), String.t()) :: {:ok, message} | {:error, String.t()}
   def get_message_with_id(topic_name, id) do
-    value = :ets.lookup(key_topic_name(topic_name), id)
+    value = :ets.lookup(key_topic_message_name(topic_name), id)
     if value != [] do
       [{_, msg}] = value
       {:ok, msg}

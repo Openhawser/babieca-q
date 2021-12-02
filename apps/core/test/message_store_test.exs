@@ -12,7 +12,9 @@ defmodule Core.MessageStoreTest do
   end
 
   test "create and close process with correct name" do
-    log = capture_log(fn -> assert :ok == MessageStore.start("Test") end)
+    log = capture_log(
+      fn -> assert {:ok, "The storage babieca-topic-Test-messages has been create"} == MessageStore.start("Test") end
+    )
     assert log =~ "The storage babieca-topic-Test-messages has been create"
     assert :ets.whereis(:"babieca-topic-Test-messages") != :undefined
     assert Process.whereis(:"babieca-topic-Test-messages") != nil
@@ -58,7 +60,7 @@ defmodule Core.MessageStoreTest do
   test "store messages" do
     topic = "Test"
     MessageStore.start(topic)
-    table = :ets.whereis(Utilities.key_topic_name(topic))
+    table = :ets.whereis(Utilities.key_topic_message_name(topic))
     msg = %{msg: "First message", timestamp: :os.system_time(:millisecond)}
     msg2 = %{msg: "Second message", timestamp: :os.system_time(:millisecond)}
 
@@ -78,7 +80,7 @@ defmodule Core.MessageStoreTest do
 
   test "get messages and get_id.." do
     topic = "Test"
-    proces_name = Utilities.key_topic_name(topic)
+    proces_name = Utilities.key_topic_message_name(topic)
     MessageStore.start(topic)
     1..10
     |> Enum.map(
@@ -111,7 +113,7 @@ defmodule Core.MessageStoreTest do
     assert {:ok, []} = MessageStore.get_messages(topic, nil)
     assert MessageStore.get_id_last_message(topic) == nil
     assert MessageStore.get_id_first_message(topic) == nil
-    assert MessageStore.get_message_with_id(topic," ") == {:error, "Not exist"}
+    assert MessageStore.get_message_with_id(topic, " ") == {:error, "Not exist"}
   end
 
 end
