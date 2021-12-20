@@ -34,14 +34,21 @@ defmodule Core.MessageStore do
   @spec start(String.t()) :: {:ok | :error, String.t()}
   def start(topic_name) do
     cond do
-      not topic_name_valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"}
-      exist_topic_storage?(topic_name) -> {:error, "The storage of topic #{topic_name} already exists"}
-      exist_storage_message_agent?(topic_name) -> {:error, "The Agent of topic #{topic_name} already exists"}
-      true -> name_process = key_topic_message_name(topic_name)
-              Agent.start_link(fn -> [] end, name: name_process)
-              :ets.new(name_process, [:duplicate_bag, :protected, :named_table, read_concurrency: true])
-              Logger.info("The storage #{name_process} has been create")
-              {:ok, "The storage #{name_process} has been create"}
+      not topic_name_valid?(topic_name) ->
+        Logger.error("Name of topic: #{topic_name} is incorrect, only use letters,numbers, _ or -")
+        {:error, "Name of topic:#{topic_name} is incorrect, only use letters,numbers, _ or -"}
+      exist_topic_storage?(topic_name) ->
+        Logger.error("The storage of topic #{topic_name} already exists")
+        {:error, "The storage of topic #{topic_name} already exists"}
+      exist_storage_message_agent?(topic_name) ->
+        Logger.error("The Agent of topic #{topic_name} already exists")
+        {:error, "The Agent of topic #{topic_name} already exists"}
+      true ->
+        name_process = key_topic_message_name(topic_name)
+        Agent.start_link(fn -> [] end, name: name_process)
+        :ets.new(name_process, [:duplicate_bag, :protected, :named_table, read_concurrency: true])
+        Logger.info("The storage #{name_process} has been create")
+        {:ok, "The storage #{name_process} has been create"}
     end
   end
 
@@ -63,22 +70,24 @@ defmodule Core.MessageStore do
   """
   @spec stop(String.t()) :: {:ok | :error, String.t()}
   def stop(topic_name) do
-    cond do
-      not topic_name_valid?(topic_name) -> {:error, "Name of topic is incorrect, only use letters, numbers, _ or -"}
-      true -> name_process = key_topic_message_name(topic_name)
-              if exist_topic_storage?(topic_name) do
-                :ets.delete(name_process)
-              else
-                Logger.warning("The topic #{topic_name} storage not exists", [error_code: :pc_load_letter])
-              end
-              if exist_storage_message_agent?(topic_name) do
-                Agent.stop(name_process)
-              else
-                Logger.warning("The Agent of topic #{topic_name} not exists", [error_code: :pc_load_letter])
-              end
-              {:ok, "The topic #{name_process} has been close"}
+    if topic_name_valid?(topic_name) do
+      name_process = key_topic_message_name(topic_name)
+      if exist_topic_storage?(topic_name) do
+        :ets.delete(name_process)
+      else
+        Logger.warning("The topic #{topic_name} storage not exists", [error_code: :pc_load_letter])
+      end
+      if exist_storage_message_agent?(topic_name) do
+        Agent.stop(name_process)
+      else
+        Logger.warning("The Agent of topic #{topic_name} not exists", [error_code: :pc_load_letter])
+      end
+      {:ok, "The topic #{name_process} has been close"}
+    else
+      {:error, "Name of topic is incorrect, only use letters, numbers, _ or -"}
     end
   end
+
 
   @type message :: %{msg: String.t(), timestamp: non_neg_integer}
 
@@ -108,6 +117,7 @@ defmodule Core.MessageStore do
       :ets.insert_new(name_process, {key, message})
       Agent.update(name_process, &([key | &1]))
     else
+      Logger.error("Message is invalid")
       {:error, "Message is invalid"}
     end
   end
@@ -127,6 +137,7 @@ defmodule Core.MessageStore do
 
   """
   @spec get_messages(String.t(), integer) :: {:ok, list({integer, message})} | {:finished, String.t()}
+  def get_messages(topic_name, message_key)
   def get_messages(_, nil), do: {:ok, []}
   def get_messages(topic_name, message_key) do
     name_process = key_topic_message_name(topic_name)
@@ -139,15 +150,15 @@ defmodule Core.MessageStore do
            |> Enum.reverse()
     result = keys
              |> Enum.map(
-                  fn key -> [h] = :ets.lookup(name_process, key)
-                            h
+                  fn key -> [msg] = :ets.lookup(name_process, key)
+                            msg
                   end
                 )
-    if result == [] do
-      {:finished, "Don't have more messages"}
-    else
-      {:ok, result}
+    case result do
+      [] -> {:finished, "Don't have more messages"}
+      _ -> {:ok, result}
     end
+
   end
 
   @doc """

@@ -36,7 +36,7 @@ defmodule Core.MessageStoreTest do
   end
 
   test "topic name incorrect" do
-    assert {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"} == MessageStore.start("Test Test")
+    assert {:error, "Name of topic:Test Test is incorrect, only use letters,numbers, _ or -"} == MessageStore.start("Test Test")
   end
 
   test "create multiples process and stop " do
@@ -82,8 +82,7 @@ defmodule Core.MessageStoreTest do
     topic = "Test"
     proces_name = Utilities.key_topic_message_name(topic)
     MessageStore.start(topic)
-    1..10
-    |> Enum.map(
+    1..10 |> Enum.map(
          fn x -> MessageStore.add_message(topic, %{msg: "#{x} message", timestamp: :os.system_time(:millisecond)})end
        )
 

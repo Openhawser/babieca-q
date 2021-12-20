@@ -8,7 +8,7 @@ defmodule Core.TopicManager do
     Module that creates an agent by topic, where it will be saved
 
   ```Elixir
-  [{"user", %{status: :to_assign, :asigned, id: id of message or nil}}
+  [{:"user", %{status: :to_assign, :asigned, id: id of message or nil}},]
   ```
 
     This module provides all the functionality to obtain messages from users, the logic is as follows.
@@ -18,9 +18,9 @@ defmodule Core.TopicManager do
   * If the user is new, it registers it, looks for the most modern message, if not, it would be
   assigned the state :to_assign to be assigned in the next iteration if there is already data.
 
-  * If the user is registered and has status: assigned and therefore a message id, we will serve the following message.
+  * If the user is registered and has status :assigned and therefore a message id, we will serve the following message.
 
-  * If the user is registered and has a status: to_assign the first message is searched and the message associated with this message is returned
+  * If the user is registered and has a status :to_assign the first message is searched and the message associated with this message is returned
 
   It also provides the functionality to update the id of the message that the user has.
   Since it should not be updated unless the message has been delivered to the consumer
@@ -29,22 +29,44 @@ defmodule Core.TopicManager do
 
   """
 
+  @doc """
+  Start function create the topic infraestructure. Agent to save the user info and the messages stores
+  """
+  @spec start(String.t()) :: {:ok | :error, String.t()}
   def start(topic_name) do
     cond do
       not Utilities.topic_name_valid?(topic_name) ->
-        {:error, "Name of topic is incorrect, only use letters,numbers, _ or -"}
+        Logger.error("Name of topic: #{topic_name} is incorrect, only use letters,numbers, _ or -")
+        {:error, "Name of topic: #{topic_name} is incorrect, only use letters,numbers, _ or -"}
       Utilities.exist_topic_agent?(topic_name) ->
         {:error, "Topic exist, I can't create"}
       true ->
-        {result, msg} = MessageStore.start(topic_name)
-        if result == :ok do
-          Agent.start_link(fn -> [] end, name: Utilities.key_topic_name(topic_name))
-          Logger.info("The Topic #{topic_name} has been create")
-          {:ok, "The Topic #{topic_name} has been create"}
-        else
-          {result, msg}
+
+        case MessageStore.start(topic_name) do
+          {:ok, _} -> Agent.start_link(fn -> [] end, name: Utilities.key_topic_name(topic_name))
+                      Logger.info("The Topic #{topic_name} has been create")
+                      {:ok, "The Topic #{topic_name} has been create"}
+          {:error, msg} -> {:error, msg}
         end
+
     end
   end
 
+  @doc """
+   Function to know if the user has been register in the topic
+  """
+  @spec exist_user?(String.t(), String.t()) :: boolean
+  def exist_user?(topic_name, user_name) do
+    if Utilities.exist_topic_agent?(topic_name) do
+      user_name = String.to_atom(user_name)
+      value = Agent.get(Utilities.key_topic_name(topic_name), &(&1[user_name]))
+      value
+    else
+      false
+    end
+
+
+  end
 end
+
+
