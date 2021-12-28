@@ -1,4 +1,5 @@
 defmodule Core do
+  use GenServer
   alias Core.TopicManager
 
   @moduledoc """
@@ -7,23 +8,15 @@ defmodule Core do
 
   @name __MODULE__
 
-  def start do
-    case Process.whereis(@name) do
-      nil ->
-        pid = spawn(fn -> loop() end)
-        Process.register(pid, @name)
-        :ok
-      _ ->
-        :already_started
-    end
+  def start_link(state \\ []) do
+    GenServer.start_link(@name, state, name: :BabiecaQ)
+  end
+  def init(init_arg) do
+    {:ok, init_arg}
   end
 
-  def loop() do
-    receive do
-      {from, :create_topic, topic_name} -> send(from, TopicManager.start(topic_name))
-                                           loop()
-    end
+  def handle_call({:create_topic, topic_name}, _from, state) do
+    {:reply, TopicManager.start(topic_name), state}
   end
-
 
 end
