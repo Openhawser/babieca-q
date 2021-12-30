@@ -138,7 +138,7 @@ defmodule Core.MessageStore do
   """
   @spec get_messages(String.t(), integer) :: {:ok, list({integer, message})} | {:finished, String.t()}
   def get_messages(topic_name, message_key)
-  def get_messages(_, nil), do: {:ok, []}
+  def get_messages(_, nil), do: {:not_asigned, []}
   def get_messages(topic_name, message_key) do
     name_process = key_topic_message_name(topic_name)
     keys = Agent.get(
@@ -154,9 +154,11 @@ defmodule Core.MessageStore do
                             msg
                   end
                 )
-    case result do
-      [] -> {:finished, "Don't have more messages"}
-      _ -> {:ok, result}
+
+    if length(result) == 0 do
+      {:finished, "Don't have more messages"}
+    else
+      {:ok, result}
     end
 
   end

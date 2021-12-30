@@ -28,6 +28,12 @@ defmodule Core.MessageStoreTest do
     assert MessageStore.start("Test") == {:error, "The storage of topic Test already exists"}
   end
 
+  test "Agent of topic exist" do
+    name_process = :"babieca-topic-Test-messages"
+    Agent.start_link(fn -> [] end, name: name_process)
+    assert MessageStore.start("Test") == {:error, "The Agent of topic Test already exists"}
+  end
+
   test "stop Topic not exist" do
     log = capture_log(fn -> MessageStore.stop("Test") end)
     for msg <- ["The topic Test storage not exists", "The Agent of topic Test not exists"] do
@@ -36,7 +42,9 @@ defmodule Core.MessageStoreTest do
   end
 
   test "topic name incorrect" do
-    assert {:error, "Name of topic:Test Test is incorrect, only use letters,numbers, _ or -"} == MessageStore.start("Test Test")
+    assert {:error, "Name of topic:Test Test is incorrect, only use letters,numbers, _ or -"} == MessageStore.start(
+             "Test Test"
+           )
   end
 
   test "create multiples process and stop " do
@@ -82,7 +90,8 @@ defmodule Core.MessageStoreTest do
     topic = "Test"
     proces_name = Utilities.key_topic_message_name(topic)
     MessageStore.start(topic)
-    1..10 |> Enum.map(
+    1..10
+    |> Enum.map(
          fn x -> MessageStore.add_message(topic, %{msg: "#{x} message", timestamp: :os.system_time(:millisecond)})end
        )
 
@@ -97,7 +106,7 @@ defmodule Core.MessageStoreTest do
            |> Enum.map(fn {_, value} -> value.msg end) == 4..10
                                                           |> Enum.map(fn x -> "#{x} message" end)
 
-    assert {:ok, []} = MessageStore.get_messages(topic, nil)
+    assert {:not_asigned, []} = MessageStore.get_messages(topic, nil)
 
 
     {:ok, value} = MessageStore.get_message_with_id(topic, MessageStore.get_id_last_message(topic))
@@ -109,7 +118,8 @@ defmodule Core.MessageStoreTest do
   test "get messages and get_id.. empty" do
     topic = "Test"
     MessageStore.start(topic)
-    assert {:ok, []} = MessageStore.get_messages(topic, nil)
+    {:not_asigned, []} == MessageStore.get_messages(topic, nil)
+    assert  {:finished, "Don't have more messages"} == MessageStore.get_messages(topic, "key")
     assert MessageStore.get_id_last_message(topic) == nil
     assert MessageStore.get_id_first_message(topic) == nil
     assert MessageStore.get_message_with_id(topic, " ") == {:error, "Not exist"}
