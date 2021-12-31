@@ -72,7 +72,7 @@ defmodule Core.MessageStoreTest do
     msg = %{msg: "First message", timestamp: :os.system_time(:millisecond)}
     msg2 = %{msg: "Second message", timestamp: :os.system_time(:millisecond)}
 
-    assert :ok == MessageStore.add_message(msg,topic)
+    assert :ok == MessageStore.add_message(msg, topic)
     [{_, result}] = :ets.tab2list(table)
     assert result == msg
     assert :ok == MessageStore.add_message(msg2, topic)

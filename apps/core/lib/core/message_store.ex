@@ -155,7 +155,7 @@ defmodule Core.MessageStore do
                   end
                 )
 
-    if length(result) == 0 do
+    if Enum.empty?(result) do
       {:finished, "Don't have more messages"}
     else
       {:ok, result}
