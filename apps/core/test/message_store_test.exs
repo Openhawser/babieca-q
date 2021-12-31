@@ -72,17 +72,17 @@ defmodule Core.MessageStoreTest do
     msg = %{msg: "First message", timestamp: :os.system_time(:millisecond)}
     msg2 = %{msg: "Second message", timestamp: :os.system_time(:millisecond)}
 
-    assert :ok == MessageStore.add_message(topic, msg)
+    assert :ok == MessageStore.add_message(msg,topic)
     [{_, result}] = :ets.tab2list(table)
     assert result == msg
-    assert :ok == MessageStore.add_message(topic, msg2)
+    assert :ok == MessageStore.add_message(msg2, topic)
     assert length(:ets.tab2list(table)) == 2
     assert :ets.tab2list(table)
            |> Enum.filter(fn {_, msg} -> msg not in [msg, msg2] end) == []
 
-    assert {:error, "Message is invalid"} == MessageStore.add_message(topic, %{msg: 1, timestamp: 1})
-    assert {:error, "Message is invalid"} == MessageStore.add_message(topic, %{msg: 1, timestamp: -1})
-    assert {:error, "Message is invalid"} == MessageStore.add_message(topic, "")
+    assert {:error, "Message is invalid"} == MessageStore.add_message(%{msg: 1, timestamp: 1}, topic)
+    assert {:error, "Message is invalid"} == MessageStore.add_message(%{msg: 1, timestamp: -1}, topic)
+    assert {:error, "Message is invalid"} == MessageStore.add_message("", topic)
     MessageStore.stop(topic)
   end
 
@@ -92,37 +92,37 @@ defmodule Core.MessageStoreTest do
     MessageStore.start(topic)
     1..10
     |> Enum.map(
-         fn x -> MessageStore.add_message(topic, %{msg: "#{x} message", timestamp: :os.system_time(:millisecond)})end
+         fn x -> MessageStore.add_message(%{msg: "#{x} message", timestamp: :os.system_time(:millisecond)}, topic)end
        )
 
     message8 = 10 - 8
-    {:ok, result} = MessageStore.get_messages(topic, Enum.at(Agent.get(proces_name, &(&1)), message8))
+    {:ok, result} = MessageStore.get_messages(Enum.at(Agent.get(proces_name, &(&1)), message8), topic)
     assert result
            |> Enum.map(fn {_, value} -> value.msg end) == 9..10
                                                           |> Enum.map(fn x -> "#{x} message" end)
     message3 = 10 - 3
-    {:ok, result} = MessageStore.get_messages(topic, Enum.at(Agent.get(proces_name, &(&1)), message3))
+    {:ok, result} = MessageStore.get_messages(Enum.at(Agent.get(proces_name, &(&1)), message3), topic)
     assert result
            |> Enum.map(fn {_, value} -> value.msg end) == 4..10
                                                           |> Enum.map(fn x -> "#{x} message" end)
 
-    assert {:not_asigned, []} = MessageStore.get_messages(topic, nil)
+    assert {:not_asigned, []} = MessageStore.get_messages(nil, topic)
 
 
-    {:ok, value} = MessageStore.get_message_with_id(topic, MessageStore.get_id_last_message(topic))
+    {:ok, value} = MessageStore.get_message_with_id(MessageStore.get_id_last_message(topic), topic)
     assert value.msg == "10 message"
-    {:ok, value} = MessageStore.get_message_with_id(topic, MessageStore.get_id_first_message(topic))
+    {:ok, value} = MessageStore.get_message_with_id(MessageStore.get_id_first_message(topic), topic)
     assert value.msg == "1 message"
     MessageStore.stop(topic)
   end
   test "get messages and get_id.. empty" do
     topic = "Test"
     MessageStore.start(topic)
-    {:not_asigned, []} == MessageStore.get_messages(topic, nil)
-    assert  {:finished, "Don't have more messages"} == MessageStore.get_messages(topic, "key")
+    {:not_asigned, []} == MessageStore.get_messages(nil, topic)
+    assert  {:finished, "Don't have more messages"} == MessageStore.get_messages("key", topic)
     assert MessageStore.get_id_last_message(topic) == nil
     assert MessageStore.get_id_first_message(topic) == nil
-    assert MessageStore.get_message_with_id(topic, " ") == {:error, "Not exist"}
+    assert MessageStore.get_message_with_id(" ", topic) == {:error, "Not exist"}
   end
 
 end

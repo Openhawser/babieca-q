@@ -1,5 +1,6 @@
 defmodule Core.TopicManager do
   require Logger
+  require Core.Config
 
   alias Core.Utilities
   alias Core.MessageStore
@@ -35,13 +36,14 @@ defmodule Core.TopicManager do
   @spec start(String.t()) :: {:ok | :error, String.t()}
   def start(topic_name) do
     cond do
+      String.length(topic_name) >= Core.Config.max_length_topic ->
+        {:error, "The length of the topic_name exceeds the maximum #{Core.Config.max_length_topic}"}
       not Utilities.topic_name_valid?(topic_name) ->
         Logger.error("Name of topic: #{topic_name} is incorrect, only use letters,numbers, _ or -")
         {:error, "Name of topic: #{topic_name} is incorrect, only use letters,numbers, _ or -"}
       Utilities.exist_topic_agent?(topic_name) ->
         {:error, "Topic exist, I can't create"}
       true ->
-
         case MessageStore.start(topic_name) do
           {:ok, _} -> Agent.start_link(fn -> [] end, name: Utilities.key_topic_name(topic_name))
                       Logger.info("The Topic #{topic_name} has been create")
@@ -50,6 +52,35 @@ defmodule Core.TopicManager do
         end
 
     end
+  end
+
+  @doc """
+   Function to add message to topic
+  """
+  @spec add_message_2_topic(String.t(), String.t()) :: {:ok | :error, String.t()}
+  def add_message_2_topic(msg, topic_name) do
+    cond do
+      not exist_topic?(topic_name) ->
+        {:error, "Topic not exist"}
+      String.length(msg) > Core.Config.max_length_topic ->
+        {:error, "The length of the topic_name exceeds the maximum #{Core.Config.max_length_topic}"}
+      true ->
+        MessageStore.add_message(%{msg: msg, timestamp: :os.system_time(:millisecond)}, topic_name)
+    end
+  end
+
+  @doc """
+  Function to know if topic has been create
+  """
+  @spec exist_topic?(String.t()) :: boolean
+  def exist_topic?(topic_name) do
+    Utilities.all(
+      [
+        Utilities.exist_topic_agent?(topic_name),
+        Utilities.exist_topic_storage?(topic_name),
+        Utilities.exist_storage_message_agent?(topic_name)
+      ]
+    )
   end
 
   @doc """
@@ -64,8 +95,6 @@ defmodule Core.TopicManager do
     else
       false
     end
-
-
   end
 end
 

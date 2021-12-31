@@ -14,7 +14,7 @@ defmodule Core.Client do
 
   @spec add_message_2_topic(String.t(), String.t()) :: {:ok | :error, String.t()}
   def add_message_2_topic(msg, topic_name) do
-
+    GenServer.call(:BabiecaQ, {:add_message, topic_name, msg})
   end
 
 

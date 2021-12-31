@@ -108,9 +108,9 @@ defmodule Core.MessageStore do
       - {:error , "error description"}
 
   """
-  @spec add_message(String.t(), message) :: {:ok | :error, String.t()}
-  def add_message(topic_name, message)
-  def add_message(topic_name, message) do
+  @spec add_message(message, String.t()) :: {:ok | :error, String.t()}
+  def add_message(message, topic_name)
+  def add_message(message, topic_name) do
     if valid_message?(message) do
       name_process = key_topic_message_name(topic_name)
       key = UUID.uuid4()
@@ -136,10 +136,10 @@ defmodule Core.MessageStore do
       - {:ok ,{id_message, message}} | {:finished, "Don't have more messages"}
 
   """
-  @spec get_messages(String.t(), integer) :: {:ok, list({integer, message})} | {:finished, String.t()}
-  def get_messages(topic_name, message_key)
-  def get_messages(_, nil), do: {:not_asigned, []}
-  def get_messages(topic_name, message_key) do
+  @spec get_messages(String.t(), String.t()) :: {:ok, list({String.t(), message})} | {:finished, String.t()}
+  def get_messages(message_key, topic_name)
+  def get_messages(nil, _), do: {:not_asigned, []}
+  def get_messages(message_key, topic_name) do
     name_process = key_topic_message_name(topic_name)
     keys = Agent.get(
              name_process,
@@ -232,7 +232,7 @@ defmodule Core.MessageStore do
 
   """
   @spec get_message_with_id(String.t(), String.t()) :: {:ok, message} | {:error, String.t()}
-  def get_message_with_id(topic_name, id) do
+  def get_message_with_id(id, topic_name) do
     value = :ets.lookup(key_topic_message_name(topic_name), id)
     if value != [] do
       [{_, msg}] = value

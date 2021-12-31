@@ -1,6 +1,8 @@
 defmodule Core do
   use GenServer
+  require Core.Config
   alias Core.TopicManager
+
 
   @moduledoc """
   Core is the orchestator module, this GenServer is the entrypoint to work
@@ -17,6 +19,10 @@ defmodule Core do
 
   def handle_call({:create_topic, topic_name}, _from, state) do
     {:reply, TopicManager.start(topic_name), state}
+  end
+
+  def handle_call({:add_message, topic_name, msg}, _from, state) do
+    {:reply, TopicManager.add_message_2_topic(msg, topic_name), state}
   end
 
 end

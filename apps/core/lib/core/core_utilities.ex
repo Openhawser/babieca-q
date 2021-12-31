@@ -86,4 +86,20 @@ defmodule Core.Utilities do
   def valid_message?(%{msg: text, timestamp: value}) when is_bitstring(text) and is_number(value) and value > 0,
       do: true
   def valid_message?(_), do: false
+
+  @doc """
+  All function of python all([true, true, true]) -> true,  all([true, false, true])-> false
+  """
+  @spec all(list(boolean)) :: boolean
+  def all(list_of_boleans)
+  def all([]), do: true
+  def all([h | _]) when not is_boolean(h), do: false
+  def all([h | t]) do
+    if h == false do
+      false
+    else
+      all(t)
+    end
+  end
+
 end
