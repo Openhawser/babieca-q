@@ -104,7 +104,7 @@ defmodule Core.TopicManager do
       if length(invalid_msgs) > 0 do
         {:incomplete, "The following messages could not be inserted", invalid_msgs}
       else
-        {:ok, "The messages has been insert in #{topic_name}", []}
+        {:ok, "The messages has been insert in #{topic_name}"}
       end
     end
   end
@@ -135,13 +135,26 @@ defmodule Core.TopicManager do
    Function to know if the user has been register in the topic
   """
   @spec exist_user?(String.t(), String.t()) :: boolean
-  def exist_user?(topic_name, user_name) do
+  def exist_user?(user_name, topic_name) do
     if Utilities.exist_topic_agent?(topic_name) do
-      user_name = String.to_atom(user_name)
-      value = Agent.get(Utilities.key_topic_name(topic_name), &(&1[user_name]))
-      value
+      value = Agent.get(Utilities.key_topic_name(topic_name), &(&1[String.to_atom(user_name)]))
+      if value == nil do
+        false
+      else
+        true
+      end
     else
       false
+    end
+  end
+
+  @spec add_user(String.t(), String.t()) :: {:ok | :error, String.t()}
+  def add_user(user_name, topic_name) do
+    if exist_user?(user_name, topic_name) do
+      {:error, "The user:#{user_name} exist in topic #{topic_name}"}
+    else
+      Agent.update(Utilities.key_topic_name(topic_name), &([{String.to_atom(user_name), 1} | &1]))
+      {:ok, "The user:#{user_name} has been added in topic #{topic_name}"}
     end
   end
 end
