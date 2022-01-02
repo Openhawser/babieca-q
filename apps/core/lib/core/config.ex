@@ -4,7 +4,7 @@ defmodule Core.Config do
   """
 
 
-  defmacro max_length_msg, do: 1_048_576
+  defmacro max_bytes_msg, do: 512_000
   defmacro max_length_topic, do: 512
 
 

@@ -1,4 +1,6 @@
 defmodule Core.Utilities do
+  require Core.Config
+
   @moduledoc """
   Module that contains the utilitarian functions of the core module
   """
@@ -77,15 +79,7 @@ defmodule Core.Utilities do
     String.to_atom("babieca-topic-#{topic_name}")
   end
 
-  @doc """
-    validate if the message is correct
-    %{msg: str, timestamp: non negative integer}
-  """
-  @spec valid_message?(Core.MessageStore.message) :: boolean
-  def valid_message?(message)
-  def valid_message?(%{msg: text, timestamp: value}) when is_bitstring(text) and is_number(value) and value > 0,
-      do: true
-  def valid_message?(_), do: false
+
 
   @doc """
   All function of python all([true, true, true]) -> true,  all([true, false, true])-> false
@@ -102,4 +96,28 @@ defmodule Core.Utilities do
     end
   end
 
+  @doc """
+    validate if the message is correct
+  """
+  @spec valid_message?(Core.MessageStore.message) :: boolean
+  def valid_message?(nil), do: false
+  def valid_message?(message) do
+    byte_size = message
+                |> :erlang.term_to_binary() |> :erlang.byte_size()
+    byte_size <= Core.Config.max_bytes_msg
+  end
+
+  @doc"""
+  This function separates the valid and invalid messages from the list of messages.
+  """
+  @spec split_valid_invalid_msg(list(String.t)) :: {list(String.t), list(String.t)}
+  def split_valid_invalid_msg(messages, valid_messages \\ [], invalid_messages \\ [])
+  def split_valid_invalid_msg([], valid, invalid), do: {Enum.reverse(valid), Enum.reverse(invalid)}
+  def split_valid_invalid_msg([msg | t], valid, invalid) do
+    if valid_message?(msg) do
+      split_valid_invalid_msg(t, [msg | valid], invalid)
+    else
+      split_valid_invalid_msg(t, valid, [msg | invalid])
+    end
+  end
 end

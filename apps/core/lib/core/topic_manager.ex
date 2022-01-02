@@ -63,9 +63,39 @@ defmodule Core.TopicManager do
       not exist_topic?(topic_name) ->
         {:error, "Topic not exist"}
       String.length(msg) > Core.Config.max_length_topic ->
-        {:error, "The length of the topic_name exceeds the maximum #{Core.Config.max_length_topic}"}
+        {:error, "The bytes of the message exceeds the maximum #{Core.Config.max_bytes_msg}"}
       true ->
         MessageStore.add_message(%{msg: msg, timestamp: :os.system_time(:millisecond)}, topic_name)
+    end
+  end
+
+  @doc """
+   Function to add message to topic
+  """
+  @spec add_multiples_messages_2_topic(list(String.t()), String.t()) :: {:ok | :error, String.t()}
+  def add_multiples_messages_2_topic(messages, topic_name) do
+    if not_exist_topic?(topic_name) do
+      {:error, "Topic not exist"}
+    else
+      {valid_msgs, invalid_msgs} = Utilities.split_valid_invalid_msg(messages)
+
+      valid_msgs
+      |> Enum.each(
+           fn msg ->
+             MessageStore.add_message(
+               %{
+                 msg: msg,
+                 timestamp: :os.system_time(:millisecond)
+               },
+               topic_name
+             )
+           end
+         )
+      if length(invalid_msgs) > 0 do
+        {:incomplete, "The following messages could not be inserted", invalid_msgs}
+      else
+        {:ok, "The messages has been insert in #{topic_name}", []}
+      end
     end
   end
 
@@ -81,6 +111,14 @@ defmodule Core.TopicManager do
         Utilities.exist_storage_message_agent?(topic_name)
       ]
     )
+  end
+
+  @doc """
+  Function to know if topic hasn't been create
+  """
+  @spec not_exist_topic?(String.t()) :: boolean
+  def not_exist_topic?(topic_name) do
+    not exist_topic?(topic_name)
   end
 
   @doc """

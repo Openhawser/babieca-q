@@ -72,15 +72,15 @@ defmodule Core.MessageStoreTest do
     msg = %{msg: "First message", timestamp: :os.system_time(:millisecond)}
     msg2 = %{msg: "Second message", timestamp: :os.system_time(:millisecond)}
 
-    assert :ok == MessageStore.add_message(msg, topic)
+    assert {:ok, "The message has been insert in Test"} == MessageStore.add_message(msg, topic)
     [{_, result}] = :ets.tab2list(table)
     assert result == msg
-    assert :ok == MessageStore.add_message(msg2, topic)
+    assert {:ok, "The message has been insert in Test"} == MessageStore.add_message(msg2, topic)
     assert length(:ets.tab2list(table)) == 2
     assert :ets.tab2list(table)
            |> Enum.filter(fn {_, msg} -> msg not in [msg, msg2] end) == []
 
-    assert {:error, "Message is invalid"} == MessageStore.add_message(%{msg: 1, timestamp: 1}, topic)
+    assert {:ok, "The message has been insert in Test"} == MessageStore.add_message(%{msg: 1, timestamp: 1}, topic)
     assert {:error, "Message is invalid"} == MessageStore.add_message(%{msg: 1, timestamp: -1}, topic)
     assert {:error, "Message is invalid"} == MessageStore.add_message("", topic)
     MessageStore.stop(topic)

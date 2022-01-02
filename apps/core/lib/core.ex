@@ -1,6 +1,5 @@
 defmodule Core do
   use GenServer
-  require Core.Config
   alias Core.TopicManager
 
 
@@ -23,6 +22,9 @@ defmodule Core do
 
   def handle_call({:add_message, topic_name, msg}, _from, state) do
     {:reply, TopicManager.add_message_2_topic(msg, topic_name), state}
+  end
+  def handle_call({:add_multiples_messages, topic_name, messages}, _from, state) do
+    {:reply, TopicManager.add_multiples_messages_2_topic(messages, topic_name), state}
   end
 
 end

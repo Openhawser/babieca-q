@@ -3,8 +3,8 @@ defmodule Core.MessageStore do
     topic_name_valid?: 1,
     exist_topic_storage?: 1,
     key_topic_message_name: 1,
-    exist_storage_message_agent?: 1,
-    valid_message?: 1]
+    exist_storage_message_agent?: 1
+  ]
 
   use Agent
   require Logger
@@ -110,16 +110,16 @@ defmodule Core.MessageStore do
   """
   @spec add_message(message, String.t()) :: {:ok | :error, String.t()}
   def add_message(message, topic_name)
-  def add_message(message, topic_name) do
-    if valid_message?(message) do
-      name_process = key_topic_message_name(topic_name)
-      key = UUID.uuid4()
-      :ets.insert_new(name_process, {key, message})
-      Agent.update(name_process, &([key | &1]))
-    else
-      Logger.error("Message is invalid")
-      {:error, "Message is invalid"}
-    end
+  def add_message(message = %{timestamp: t, msg: _}, topic_name) when t > 0 do
+    name_process = key_topic_message_name(topic_name)
+    key = UUID.uuid4()
+    :ets.insert_new(name_process, {key, message})
+    Agent.update(name_process, &([key | &1]))
+    {:ok, "The message has been insert in #{topic_name}"}
+  end
+  def add_message(message, _) do
+    Logger.error("Message is invalid #{inspect(message)}")
+    {:error, "Message is invalid"}
   end
 
   @doc"""

@@ -41,4 +41,30 @@ defmodule CoreUtilitiesTest do
   test "exist topic storage not string" do
     assert Utilities.exist_topic_storage?(1) == false
   end
+
+  test "all logic function" do
+    assert Utilities.all([])
+    assert Utilities.all([1]) == false
+    assert Utilities.all([true, 1]) == false
+    assert Utilities.all([true, true, true]) == true
+    assert Utilities.all([true, false, true]) == false
+  end
+
+  test "validate if size of bytes of message is correct" do
+    assert Utilities.valid_message?(1) == true
+    assert Utilities.valid_message?([]) == true
+    assert Utilities.valid_message?(%{}) == true
+    assert Utilities.valid_message?({}) == true
+    assert Utilities.valid_message?("") == true
+    assert Utilities.valid_message?(nil) == false
+    assert Utilities.valid_message?(String.duplicate("a", 511_994)) == true
+    assert Utilities.valid_message?(String.duplicate("a", 511_995)) == false
+  end
+
+  test "split messages valid and invalid" do
+    invalid = String.duplicate("a", 511_995)
+    msgs = [1, 2, %{}, nil, invalid]
+    assert Utilities.split_valid_invalid_msg(msgs) == {[1, 2, %{}], [nil, invalid]}
+    assert Utilities.split_valid_invalid_msg([]) == {[], []}
+  end
 end
