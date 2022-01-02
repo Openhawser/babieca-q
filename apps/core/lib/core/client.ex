@@ -26,5 +26,10 @@ defmodule Core.Client do
     GenServer.call(:BabiecaQ, {:add_multiples_messages, topic_name, messages})
   end
 
+  @spec delete_topic(String.t()) :: {:ok | :error, String.t()}
+  def delete_topic(topic_name) do
+    GenServer.call(:BabiecaQ, {:delete_topic, topic_name})
+  end
+
 
 end

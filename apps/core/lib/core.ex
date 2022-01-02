@@ -27,4 +27,8 @@ defmodule Core do
     {:reply, TopicManager.add_multiples_messages_2_topic(messages, topic_name), state}
   end
 
+  def handle_call({:delete_topic, topic_name}, _from, state) do
+    {:reply, TopicManager.delete_topic(topic_name), state}
+  end
+
 end

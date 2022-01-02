@@ -54,15 +54,25 @@ defmodule Core.TopicManager do
     end
   end
 
+  def delete_topic(topic_name) do
+    if Utilities.exist_topic_agent?(topic_name) do
+      Agent.stop(Utilities.key_topic_name(topic_name))
+      MessageStore.stop(topic_name)
+      {:ok, "Topic: #{topic_name} has been deleted"}
+    else
+      {:error, "Topic: #{topic_name} not exist"}
+    end
+  end
+
   @doc """
    Function to add message to topic
   """
-  @spec add_message_2_topic(String.t(), String.t()) :: {:ok | :error, String.t()}
+  @spec add_message_2_topic(any(), String.t()) :: {:ok | :error, String.t()}
   def add_message_2_topic(msg, topic_name) do
     cond do
       not exist_topic?(topic_name) ->
         {:error, "Topic not exist"}
-      String.length(msg) > Core.Config.max_length_topic ->
+      Utilities.invalid_message?(msg) ->
         {:error, "The bytes of the message exceeds the maximum #{Core.Config.max_bytes_msg}"}
       true ->
         MessageStore.add_message(%{msg: msg, timestamp: :os.system_time(:millisecond)}, topic_name)

@@ -99,13 +99,19 @@ defmodule Core.Utilities do
   @doc """
     validate if the message is correct
   """
-  @spec valid_message?(Core.MessageStore.message) :: boolean
+  @spec valid_message?(any()) :: boolean
   def valid_message?(nil), do: false
   def valid_message?(message) do
     byte_size = message
-                |> :erlang.term_to_binary() |> :erlang.byte_size()
+                |> :erlang.term_to_binary()
+                |> :erlang.byte_size()
     byte_size <= Core.Config.max_bytes_msg
   end
+  @doc """
+    validate if the message is incorrect
+  """
+  @spec valid_message?(any()) :: boolean
+  def invalid_message?(message), do: not valid_message?(message)
 
   @doc"""
   This function separates the valid and invalid messages from the list of messages.
