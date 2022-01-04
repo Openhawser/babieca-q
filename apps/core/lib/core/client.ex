@@ -1,4 +1,6 @@
 defmodule Core.Client do
+  require Logger
+
   @moduledoc """
     Client to access BabiecaQ. Can be done
 
@@ -31,5 +33,20 @@ defmodule Core.Client do
     GenServer.call(:BabiecaQ, {:delete_topic, topic_name})
   end
 
-
+  @spec consumer_pull(String.t(), String.t()) :: {:error, String.t()} | {:finished, String.t()} | {:ok, any()}
+  def consumer_pull(user_name, topic_name) do
+    case GenServer.call(:BabiecaQ, {:get_next_message, user_name, topic_name}) do
+      {:error, value} -> Logger.error(value)
+                         {:error, value}
+      {:ok, value} -> case GenServer.call(:BabiecaQ, {:move_user_to_next_message, user_name, topic_name}) do
+                        :ok -> {:ok, value}
+                        {:error, msg} -> Logger.error(msg)
+                                         {:ok, value}
+                      end
+      {:finished, value} -> Logger.info(value)
+                            {:finished, "Don't have more messages"}
+      {key, value} -> Logger.warning("The process has returned uncontrolled states #{inspect({key, value})}")
+                      {key, value}
+    end
+  end
 end

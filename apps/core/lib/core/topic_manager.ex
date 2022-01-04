@@ -157,6 +157,17 @@ defmodule Core.TopicManager do
       {:ok, "The user:#{user_name} has been added in topic #{topic_name}"}
     end
   end
+
+
+  def get_next_message(user_name, topic_name) do
+
+  end
+
+  def move_user_to_next_message(user_name, topic_name) do
+
+  end
+
+
 end
 
 
