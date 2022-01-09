@@ -158,8 +158,11 @@ defmodule Core.TopicManager do
     end
   end
 
-
+  @spec add_user(String.t(), String.t()) :: {:ok | :error | :finished, String.t()}
   def get_next_message(user_name, topic_name) do
+    if not exist_user?(user_name, topic_name) do
+      add_user(user_name, topic_name)
+    end
 
   end
 
