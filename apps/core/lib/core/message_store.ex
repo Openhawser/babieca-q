@@ -1,7 +1,7 @@
 defmodule Core.MessageStore do
   import Core.Utilities, only: [
     topic_name_valid?: 1,
-    exist_topic_storage?: 1,
+    exist_ets_storage?: 1,
     key_topic_message_name: 1,
     exist_storage_message_agent?: 1
   ]
@@ -33,18 +33,18 @@ defmodule Core.MessageStore do
   """
   @spec start(String.t()) :: {:ok | :error, String.t()}
   def start(topic_name) do
+    name_process = key_topic_message_name(topic_name)
     cond do
       not topic_name_valid?(topic_name) ->
         Logger.error("Name of topic: #{topic_name} is incorrect, only use letters,numbers, _ or -")
         {:error, "Name of topic:#{topic_name} is incorrect, only use letters,numbers, _ or -"}
-      exist_topic_storage?(topic_name) ->
+      exist_ets_storage?(name_process) ->
         Logger.error("The storage of topic #{topic_name} already exists")
         {:error, "The storage of topic #{topic_name} already exists"}
       exist_storage_message_agent?(topic_name) ->
         Logger.error("The Agent of topic #{topic_name} already exists")
         {:error, "The Agent of topic #{topic_name} already exists"}
       true ->
-        name_process = key_topic_message_name(topic_name)
         Agent.start_link(fn -> [] end, name: name_process)
         :ets.new(name_process, [:duplicate_bag, :protected, :named_table, read_concurrency: true])
         Logger.info("The storage #{name_process} has been create")
@@ -72,7 +72,7 @@ defmodule Core.MessageStore do
   def stop(topic_name) do
     if topic_name_valid?(topic_name) do
       name_process = key_topic_message_name(topic_name)
-      if exist_topic_storage?(topic_name) do
+      if exist_ets_storage?(name_process) do
         :ets.delete(name_process)
       else
         Logger.warning("The topic #{topic_name} storage not exists", [error_code: :pc_load_letter])
@@ -89,7 +89,7 @@ defmodule Core.MessageStore do
   end
 
 
-  @type message :: %{msg: String.t(), timestamp: non_neg_integer}
+  @type message :: %{msg: any(), timestamp: non_neg_integer}
 
   @doc"""
   Function to add message
@@ -112,8 +112,8 @@ defmodule Core.MessageStore do
   def add_message(message, topic_name)
   def add_message(message = %{timestamp: t, msg: _}, topic_name) when t > 0 do
     name_process = key_topic_message_name(topic_name)
-    key = UUID.uuid4()
-    :ets.insert_new(name_process, {key, message})
+    key = String.to_atom(UUID.uuid4())
+    :ets.insert(name_process, {key, message})
     Agent.update(name_process, &([key | &1]))
     {:ok, "The message has been insert in #{topic_name}"}
   end

@@ -39,7 +39,7 @@ defmodule CoreUtilitiesTest do
   end
 
   test "exist topic storage not string" do
-    assert Utilities.exist_topic_storage?(1) == false
+    assert Utilities.exist_ets_storage?(1) == false
   end
 
   test "all logic function" do

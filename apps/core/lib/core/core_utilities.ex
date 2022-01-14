@@ -22,16 +22,16 @@ defmodule Core.Utilities do
   @doc """
   Validate if the topic has a storage
   """
-  @spec exist_topic_storage?(String.t()) :: boolean
-  def exist_topic_storage?(topic_name)
-  def exist_topic_storage?(topic_name) when not is_bitstring(topic_name), do: false
-  def exist_topic_storage?(topic_name) do
-    name_storage = key_topic_message_name(topic_name)
+  @spec exist_ets_storage?(Atom) :: boolean
+  def exist_ets_storage?(name_storage)
+  def exist_ets_storage?(name_storage) when not is_atom(name_storage), do: false
+  def exist_ets_storage?(name_storage) do
     case :ets.whereis(name_storage) do
       :undefined -> false
       _ -> true
     end
   end
+
 
   @doc """
   validate si exist the agent that save the messages
