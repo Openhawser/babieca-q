@@ -10,7 +10,7 @@ defmodule Core do
   @name __MODULE__
 
   def start_link(state \\ []) do
-    GenServer.start_link(@name, state, name: :BabiecaQ)
+    GenServer.start_link(@name, state, name: {:global, :BabiecaQ})
   end
   def init(init_arg) do
     {:ok, init_arg}
