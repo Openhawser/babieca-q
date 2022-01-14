@@ -3,6 +3,7 @@ defmodule Babieca.MixProject do
 
   def project do
     [
+      name: "babieca-q",
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
@@ -16,6 +17,16 @@ defmodule Babieca.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    []
+    [
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:earmark, "~> 1.2", only: :dev},
+      {:ex_doc, "~> 0.19", only: :dev},
+    ]
+  end
+
+  def application do
+    [
+      extra_applications: [:logger]
+    ]
   end
 end
