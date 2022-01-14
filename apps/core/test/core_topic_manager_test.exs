@@ -21,7 +21,6 @@ defmodule CoreTopicManagerTest do
     assert TopicManager.exist_user?(user, topic_name) == false
     assert TopicManager.add_user(user, topic_name) == {:ok, "The user: user has been added in topic exist_user"}
     assert TopicManager.exist_user?(user, topic_name) == true
-    assert TopicManager.add_user(user, topic_name) == {:error, "The user: user exist in topic exist_user"}
     TopicManager.delete_topic(topic_name)
   end
 
@@ -54,17 +53,24 @@ defmodule CoreTopicManagerTest do
     topic_name = "next_message"
     user = "user"
     TopicManager.start(topic_name)
+    TopicManager.add_message_2_topic(%{a: 1, b: 1}, topic_name)
     TopicManager.add_message_2_topic(%{a: 1, b: 2}, topic_name)
     TopicManager.add_message_2_topic(%{a: 3, b: 4}, topic_name)
+    TopicManager.add_user(user, topic_name)
+    TopicManager.add_message_2_topic(%{a: 4, b: 5}, topic_name)
+    TopicManager.add_message_2_topic(%{a: 6, b: 7}, topic_name)
     {:ok, %{msg: msg, timestamp: _}} = TopicManager.get_message(user, topic_name)
-    assert msg == %{a: 3, b: 4}
+    assert msg == %{a: 4, b: 5}
     TopicManager.delete_topic(topic_name)
   end
 
   test "complete flow" do
     topic_name = "flow"
     user = "user"
+    user2 = "user2"
     TopicManager.start(topic_name)
+    assert TopicManager.get_message(user, topic_name) == {:error, "User not exist"}
+    TopicManager.add_user(user, topic_name)
     assert TopicManager.get_message(user, topic_name) == {:finished, "Not more messages"}
     TopicManager.add_message_2_topic(%{a: 1, b: 2}, topic_name)
     {:ok, %{msg: msg, timestamp: _}} = TopicManager.get_message(user, topic_name)

@@ -139,7 +139,7 @@ defmodule Core.TopicManager do
   @spec exist_user?(String.t(), String.t()) :: boolean
   def exist_user?(user_name, topic_name) do
     if Utilities.exist_ets_storage?(Utilities.key_topic_name(topic_name)) do
-      :ets.lookup(Utilities.key_topic_name(topic_name), String.to_atom(user_name)) != []
+      not Enum.empty?(:ets.lookup(Utilities.key_topic_name(topic_name), String.to_atom(user_name)))
     else
       false
     end
@@ -147,9 +147,7 @@ defmodule Core.TopicManager do
 
   @spec add_user(String.t(), String.t()) :: {:ok | :error, String.t()}
   def add_user(user_name, topic_name) do
-    if exist_user?(user_name, topic_name) do
-      {:error, "The user: #{user_name} exist in topic #{topic_name}"}
-    else
+    if not exist_user?(user_name, topic_name) do
       :ets.insert(
         Utilities.key_topic_name(topic_name),
         {String.to_atom(user_name), MessageStore.get_id_last_message(topic_name)}
@@ -162,24 +160,30 @@ defmodule Core.TopicManager do
   @spec get_message(String.t(), String.t()) :: {:ok | :error | :finished, String.t()}
   def get_message(user_name, topic_name) do
     if not exist_user?(user_name, topic_name) do
-      add_user(user_name, topic_name)
+      {:error, "User not exist"}
+    else
+      case user_name
+           |> get_user_key(topic_name)
+           |> MessageStore.get_next_id_message(topic_name)
+           |> MessageStore.get_message_with_id(topic_name)
+        do
+        {:ok, value} -> {:ok, value}
+        {:error, "Not exist"} -> {:finished, "Not more messages"}
+        {other, msg} -> {other, msg}
+      end
+
     end
 
-    case user_name
-         |> get_user_key(topic_name)
-         |> MessageStore.get_message_with_id(topic_name)
-      do
-      {:ok, value} -> {:ok, value}
-      {:error, "Not exist"} -> {:finished, "Not more messages"}
-      {other, msg} -> {other, msg}
-    end
+
 
   end
 
   @spec get_user_key(String.t(), String.t()) :: String.t() | nil
   def get_user_key(user_name, topic_name) do
-    [[key]] = :ets.match(Utilities.key_topic_name(topic_name), {String.to_atom(user_name), :"$1"})
-    key
+    case :ets.match(Utilities.key_topic_name(topic_name), {String.to_atom(user_name), :"$1"}) do
+      [[key]] -> key
+      value -> value
+    end
   end
 
   def move_user_to_next_message(user_name, topic_name) do

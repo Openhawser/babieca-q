@@ -216,6 +216,22 @@ defmodule Core.MessageStore do
     )
   end
 
+  @spec get_next_id_message(atom | nil, String.t()) :: String.t() | nil
+  def get_next_id_message(id, topic_name) do
+    Agent.get(
+      key_topic_message_name(topic_name),
+      fn x -> if x == [] do
+                nil
+              else
+                x
+                |> Enum.take_while(fn key -> key != id end)
+                |> List.last()
+              end
+      end
+    )
+  end
+
+
   @doc """
   Funtion to get the message with the id
 
@@ -232,6 +248,14 @@ defmodule Core.MessageStore do
 
   """
   @spec get_message_with_id(String.t(), String.t()) :: {:ok, message} | {:error, String.t()}
+  def get_message_with_id(nil, topic_name) do
+    id = get_id_last_message(topic_name)
+    if id != nil do
+      get_message_with_id(id, topic_name)
+    else
+      {:error, "Not exist"}
+    end
+  end
   def get_message_with_id(id, topic_name) do
     value = :ets.lookup(key_topic_message_name(topic_name), id)
     if value != [] do
