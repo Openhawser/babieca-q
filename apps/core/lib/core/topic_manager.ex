@@ -148,14 +148,14 @@ defmodule Core.TopicManager do
   @spec add_user(String.t(), String.t()) :: {:ok | :error, String.t()}
   def add_user(user_name, topic_name) do
     if exist_topic?(topic_name) do
-      if not exist_user?(user_name, topic_name) do
+      if exist_user?(user_name, topic_name) do
+        {:ok, "The user: #{user_name} exist in the topic"}
+      else
         :ets.insert(
           Utilities.key_topic_name(topic_name),
           {String.to_atom(user_name), MessageStore.get_id_last_message(topic_name)}
         )
         {:ok, "The user: #{user_name} has been added in topic #{topic_name}"}
-      else
-        {:ok, "The user: #{user_name} exist in the topic"}
       end
     else
       {:error, "Not exist topic"}
