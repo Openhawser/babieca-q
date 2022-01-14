@@ -3,7 +3,6 @@ defmodule CoreTopicManagerTest do
 
   alias Core.TopicManager
   alias Core.MessageStore
-  alias Core.Client
 
   @moduletag :capture_log
 
@@ -75,7 +74,24 @@ defmodule CoreTopicManagerTest do
     TopicManager.add_message_2_topic(%{a: 1, b: 2}, topic_name)
     {:ok, %{msg: msg, timestamp: _}} = TopicManager.get_message(user, topic_name)
     assert msg == %{a: 1, b: 2}
-
+    TopicManager.move_user_to_next_message(user, topic_name)
+    assert TopicManager.get_user_key(user, topic_name) != nil
+    assert TopicManager.get_message(user, topic_name) == {:finished, "Not more messages"}
+    TopicManager.add_message_2_topic(%{a: 2, b: 3}, topic_name)
+    TopicManager.add_user(user2, topic_name)
+    TopicManager.add_message_2_topic(%{a: 3, b: 4}, topic_name)
+    {:ok, %{msg: msg, timestamp: _}} = TopicManager.get_message(user, topic_name)
+    assert msg == %{a: 2, b: 3}
+    TopicManager.move_user_to_next_message(user, topic_name)
+    {:ok, %{msg: msg, timestamp: _}} = TopicManager.get_message(user, topic_name)
+    assert msg == %{a: 3, b: 4}
+    {:ok, %{msg: msg, timestamp: _}} = TopicManager.get_message(user2, topic_name)
+    assert msg == %{a: 3, b: 4}
+    TopicManager.move_user_to_next_message(user, topic_name)
+    TopicManager.move_user_to_next_message(user2, topic_name)
+    assert TopicManager.get_message(user, topic_name) == {:finished, "Not more messages"}
+    assert TopicManager.get_message(user2, topic_name) == {:finished, "Not more messages"}
+    TopicManager.delete_topic(topic_name)
   end
 
 end

@@ -118,7 +118,7 @@ defmodule Core.MessageStoreTest do
   test "get messages and get_id.. empty" do
     topic = "Test"
     MessageStore.start(topic)
-    {:not_asigned, []} == MessageStore.get_messages(nil, topic)
+    assert {:not_asigned, []} == MessageStore.get_messages(nil, topic)
     assert  {:finished, "Don't have more messages"} == MessageStore.get_messages("key", topic)
     assert MessageStore.get_id_last_message(topic) == nil
     assert MessageStore.get_id_first_message(topic) == nil

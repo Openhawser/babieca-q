@@ -33,6 +33,11 @@ defmodule Core.Client do
     GenServer.call(:BabiecaQ, {:delete_topic, topic_name})
   end
 
+  @spec create_user(String.t(), String.t()) :: {:error, String.t()} | {:ok, any()}
+  def create_user(user_name, topic_name) do
+    GenServer.call(:BabiecaQ, {:create_user, user_name, topic_name})
+  end
+
   @spec consumer_pull(String.t(), String.t()) :: {:error, String.t()} | {:finished, String.t()} | {:ok, any()}
   def consumer_pull(user_name, topic_name) do
     case GenServer.call(:BabiecaQ, {:get_next_message, user_name, topic_name}) do
@@ -41,7 +46,7 @@ defmodule Core.Client do
       {:ok, value} -> case GenServer.call(:BabiecaQ, {:move_user_to_next_message, user_name, topic_name}) do
                         :ok -> {:ok, value}
                         {:error, msg} -> Logger.error(msg)
-                                         {:ok, value}
+                                         {:error, msg, value}
                       end
       {:finished, value} -> Logger.info(value)
                             {:finished, "Don't have more messages"}

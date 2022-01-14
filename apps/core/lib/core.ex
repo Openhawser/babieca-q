@@ -31,8 +31,12 @@ defmodule Core do
     {:reply, TopicManager.delete_topic(topic_name), state}
   end
 
+  def handle_call({:create_user, user_name, topic_name}, _from, state) do
+    {:reply, TopicManager.add_user(user_name, topic_name), state}
+  end
+
   def handle_call({:get_next_message, user_name, topic_name}, _from, state) do
-    {:reply, TopicManager.get_next_message(user_name, topic_name), state}
+    {:reply, TopicManager.get_message(user_name, topic_name), state}
   end
 
   def handle_call({:move_user_to_next_message, user_name, topic_name}, _from, state) do

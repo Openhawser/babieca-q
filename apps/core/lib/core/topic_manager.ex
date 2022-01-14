@@ -147,35 +147,38 @@ defmodule Core.TopicManager do
 
   @spec add_user(String.t(), String.t()) :: {:ok | :error, String.t()}
   def add_user(user_name, topic_name) do
-    if not exist_user?(user_name, topic_name) do
-      :ets.insert(
-        Utilities.key_topic_name(topic_name),
-        {String.to_atom(user_name), MessageStore.get_id_last_message(topic_name)}
-      )
-
-      {:ok, "The user: #{user_name} has been added in topic #{topic_name}"}
+    if exist_topic?(topic_name) do
+      if not exist_user?(user_name, topic_name) do
+        :ets.insert(
+          Utilities.key_topic_name(topic_name),
+          {String.to_atom(user_name), MessageStore.get_id_last_message(topic_name)}
+        )
+        {:ok, "The user: #{user_name} has been added in topic #{topic_name}"}
+      else
+        {:ok, "The user: #{user_name} exist in the topic"}
+      end
+    else
+      {:error, "Not exist topic"}
     end
   end
 
   @spec get_message(String.t(), String.t()) :: {:ok | :error | :finished, String.t()}
   def get_message(user_name, topic_name) do
-    if not exist_user?(user_name, topic_name) do
-      {:error, "User not exist"}
-    else
-      case user_name
-           |> get_user_key(topic_name)
-           |> MessageStore.get_next_id_message(topic_name)
-           |> MessageStore.get_message_with_id(topic_name)
-        do
-        {:ok, value} -> {:ok, value}
-        {:error, "Not exist"} -> {:finished, "Not more messages"}
-        {other, msg} -> {other, msg}
+    if  exist_user?(user_name, topic_name) do
+      user_key = get_user_key(user_name, topic_name)
+      next_key = MessageStore.get_next_id_message(user_key, topic_name)
+      if next_key == nil do
+        {:finished, "Not more messages"}
+      else
+        case MessageStore.get_message_with_id(next_key, topic_name) do
+          {:ok, value} -> {:ok, value}
+          {:error, "Not exist"} -> {:finished, "Not more messages"}
+          {other, msg} -> {other, msg}
+        end
       end
-
+    else
+      {:error, "User not exist"}
     end
-
-
-
   end
 
   @spec get_user_key(String.t(), String.t()) :: String.t() | nil
@@ -186,8 +189,21 @@ defmodule Core.TopicManager do
     end
   end
 
+  @spec move_user_to_next_message(String.t(), String.t()) :: :ok | {:error, any()}
   def move_user_to_next_message(user_name, topic_name) do
-
+    try do
+      old_key = get_user_key(user_name, topic_name)
+      new_key = MessageStore.get_next_id_message(old_key, topic_name)
+      if new_key != nil do
+        :ets.insert(
+          Utilities.key_topic_name(topic_name),
+          {String.to_atom(user_name), new_key}
+        )
+      end
+      :ok
+    rescue
+      e -> {:error, e}
+    end
   end
 
 

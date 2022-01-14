@@ -248,14 +248,6 @@ defmodule Core.MessageStore do
 
   """
   @spec get_message_with_id(String.t(), String.t()) :: {:ok, message} | {:error, String.t()}
-  def get_message_with_id(nil, topic_name) do
-    id = get_id_last_message(topic_name)
-    if id != nil do
-      get_message_with_id(id, topic_name)
-    else
-      {:error, "Not exist"}
-    end
-  end
   def get_message_with_id(id, topic_name) do
     value = :ets.lookup(key_topic_message_name(topic_name), id)
     if value != [] do
