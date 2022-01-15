@@ -257,4 +257,13 @@ defmodule Core.MessageStore do
       {:error, "Not exist"}
     end
   end
+
+
+  @spec delete_messages_of_topic(String.t()) :: {:ok | :error, String.t()}
+  def delete_messages_of_topic(topic_name) do
+    :ets.delete_all_objects(key_topic_message_name(topic_name))
+    Agent.update(key_topic_message_name(topic_name), fn x -> [] end)
+    {:ok, "The messages of topic #{topic_name} has been delete"}
+  end
+
 end

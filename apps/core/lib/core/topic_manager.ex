@@ -164,7 +164,7 @@ defmodule Core.TopicManager do
 
   @spec get_message(String.t(), String.t()) :: {:ok | :error | :finished, String.t()}
   def get_message(user_name, topic_name) do
-    if  exist_user?(user_name, topic_name) do
+    if exist_user?(user_name, topic_name) do
       user_key = get_user_key(user_name, topic_name)
       next_key = MessageStore.get_next_id_message(user_key, topic_name)
       if next_key == nil do
@@ -206,6 +206,16 @@ defmodule Core.TopicManager do
     end
   end
 
+  @spec delete_messages_of_topic(String.t()) :: {:ok | :error, String.t()}
+  def delete_messages_of_topic(nil), do: {:error, "The name of topic is incorrect"}
+  def delete_messages_of_topic(topic_name) do
+    if exist_topic?(topic_name) do
+      MessageStore.delete_messages_of_topic(topic_name)
+    else
+      {:error, "Topic: #{topic_name} not exist"}
+    end
+
+  end
 
 end
 

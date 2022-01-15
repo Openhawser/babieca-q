@@ -71,5 +71,33 @@ defmodule CoreClientTest do
     {:ok, %{msg: msg4, timestamp: _}} = Client.consumer_pull(user, topic_name)
     assert  msg4 == %{a: 4, b: 5}
     assert Client.consumer_pull(user, topic_name) == {:finished, "Don't have more messages"}
+    Client.delete_topic(topic_name)
+  end
+
+  test "flow complete" do
+    topic_name = "test_flow_complete"
+    user = "user"
+    assert Client.create_user(user, topic_name) == {:error, "Not exist topic"}
+    assert Client.consumer_pull(user, topic_name) == {:error, "User not exist"}
+    assert Client.create_topic(topic_name) == {:ok, "The Topic test_flow_complete has been create"}
+    assert Client.create_user(user, topic_name) == {:ok, "The user: user has been added in topic test_flow_complete"}
+    assert Client.create_user(user, topic_name) == {:ok, "The user: user exist in the topic"}
+    assert Client.consumer_pull(user, topic_name) == {:finished, "Don't have more messages"}
+    Client.add_multiples_messages_2_topic([%{a: 1, b: 2}, %{a: 2, b: 3}, %{a: 3, b: 4}], topic_name)
+    {:ok, %{msg: msg1, timestamp: _}} = Client.consumer_pull(user, topic_name)
+    assert  msg1 == %{a: 1, b: 2}
+    assert Client.delete_messages_of_topic(topic_name) == {:ok, "The messages of topic test_flow_complete has been delete"}
+    assert Client.consumer_pull(user, topic_name) == {:finished, "Don't have more messages"}
+    Client.add_multiples_messages_2_topic([%{a: 1, b: 2}, %{a: 2, b: 3}, %{a: 3, b: 4}], topic_name)
+    {:ok, %{msg: msg, timestamp: _}} = Client.consumer_pull(user, topic_name)
+    assert  msg == %{a: 1, b: 2}
+    {:ok, %{msg: msg, timestamp: _}} = Client.consumer_pull(user, topic_name)
+    assert  msg == %{a: 2, b: 3}
+    {:ok, %{msg: msg, timestamp: _}} = Client.consumer_pull(user, topic_name)
+    assert  msg == %{a: 3, b: 4}
+    assert Client.consumer_pull(user, topic_name) == {:finished, "Don't have more messages"}
+    Client.delete_topic(topic_name)
+    assert Client.delete_messages_of_topic(topic_name) == {:error, "Topic: test_flow_complete not exist"}
+    assert Client.delete_messages_of_topic(nil) == {:error, "The name of topic is incorrect"}
   end
 end

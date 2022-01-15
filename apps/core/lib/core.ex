@@ -43,4 +43,8 @@ defmodule Core do
     {:reply, TopicManager.move_user_to_next_message(user_name, topic_name), state}
   end
 
+  def handle_call({:delete_messages, topic_name}, _from, state) do
+    {:reply, TopicManager.delete_messages_of_topic(topic_name), state}
+  end
+
 end
