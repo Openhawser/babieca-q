@@ -9,6 +9,8 @@ defmodule Babieca.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
+
+
   end
 
   # Dependencies listed here are available only for this
@@ -21,6 +23,7 @@ defmodule Babieca.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.19", only: :dev},
+      {:distillery, "~> 2.0"}
     ]
   end
 
