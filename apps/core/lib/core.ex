@@ -10,7 +10,6 @@ defmodule Core do
   @name __MODULE__
 
   def start_link(state \\ []) do
-    IO.puts(inspect(Node.self()))
     GenServer.start_link(@name, state, name: {:global, :BabiecaQ})
   end
 
