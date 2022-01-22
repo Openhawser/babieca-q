@@ -1,4 +1,4 @@
-defmodule Core.Client do
+defmodule BabiecaQClient do
   require Logger
 
   @moduledoc """

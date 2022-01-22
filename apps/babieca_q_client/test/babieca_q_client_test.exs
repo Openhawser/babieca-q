@@ -1,14 +1,14 @@
 defmodule CoreClientTest do
   use ExUnit.Case
-
-  alias Core.Client
+  alias Core
+  alias BabiecaQClient, as: Client
 
   @moduletag :capture_log
 
-  doctest Core.Client
+  doctest BabiecaQClient
 
   test "module exists" do
-    assert is_list(Core.Client.module_info())
+    assert is_list(BabiecaQClient.module_info())
   end
 
   test "create topic" do
