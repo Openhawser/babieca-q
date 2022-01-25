@@ -10,7 +10,7 @@ defmodule Core do
   @name __MODULE__
 
   def start_link(state \\ []) do
-    GenServer.start_link(@name, state, name: {:global, :BabiecaQ})
+    GenServer.start_link(@name, state, name: :BabiecaQ)
   end
 
 
@@ -47,6 +47,10 @@ defmodule Core do
 
   def handle_call({:delete_messages, topic_name}, _from, state) do
     {:reply, TopicManager.delete_messages_of_topic(topic_name), state}
+  end
+
+  def handle_call({:topic_list}, _from, state) do
+    {:reply, TopicManager.topic_list(), state}
   end
 
 end

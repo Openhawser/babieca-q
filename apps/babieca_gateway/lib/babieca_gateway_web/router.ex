@@ -16,14 +16,25 @@ defmodule BabiecaGatewayWeb.Router do
 
   scope "/", BabiecaGatewayWeb do
     pipe_through :browser
-
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", BabiecaGatewayWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", BabiecaGatewayWeb do
+     pipe_through :api
+
+   end
+  scope "/api/producer", BabiecaGatewayWeb do
+    pipe_through :api
+
+    post "/", ProducerController, :create
+  end
+  scope "/api/config", BabiecaGatewayWeb do
+    pipe_through :api
+
+    get "/", ConfigController, :index
+    post "/", ConfigController, :create
+  end
 
   # Enables LiveDashboard only for development
   #

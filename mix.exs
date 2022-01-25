@@ -29,7 +29,7 @@ defmodule Babieca.MixProject do
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
     ]
   end
 end

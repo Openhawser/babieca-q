@@ -125,6 +125,19 @@ defmodule Core.TopicManager do
     )
   end
 
+  @spec topic_list() :: [String.t()]
+  def topic_list() do
+    :ets.all()
+    |> Enum.filter(
+         fn x ->
+           is_atom(x) and String.starts_with?(to_string(x), "babieca-topic") and not (
+             String.ends_with?(to_string(x), "-messages"))
+         end
+       )
+    |> Enum.map(fn x -> String.replace(to_string(x), "babieca-topic-", "") end)
+
+  end
+
   @doc """
   Function to know if topic hasn't been create
   """
