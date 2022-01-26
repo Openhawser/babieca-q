@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea4abbb-04c7-404c-8e48-f1bbdab950ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/babiecaq_web/controllers/config_controller.ex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/babiecaq_web/controllers/producer_controller.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/babiecaq/application.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq/application.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/babiecaq/core/application.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/babiecaq/core/core_utilities.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq/core/core_utilities.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/babiecaq_web/router.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/router.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/babiecaq/mailer.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq/mailer.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/babiecaq_web/telemetry.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/telemetry.ex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mix.exs" beforeDir="false" afterPath="$PROJECT_DIR$/mix.exs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mix.lock" beforeDir="false" afterPath="$PROJECT_DIR$/mix.lock" afterDir="false" />
     </list>
@@ -146,7 +141,7 @@
       <workItem from="1643104175617" duration="14264000" />
       <workItem from="1643139482415" duration="841000" />
       <workItem from="1643146033959" duration="6616000" />
-      <workItem from="1643186998869" duration="2738000" />
+      <workItem from="1643186998869" duration="3048000" />
     </task>
     <servers />
   </component>
