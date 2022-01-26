@@ -1,13 +1,13 @@
 import Config
 
 # Configure your database
-config :babieca_gateway, BabiecaGateway.Repo,
+config :babiecaq, Babiecaq.Repo,
   username: "postgres",
   password: "postgres",
-  database: "babieca_gateway_dev",
+  database: "babiecaq_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 0
+  pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -15,14 +15,14 @@ config :babieca_gateway, BabiecaGateway.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :babieca_gateway, BabiecaGatewayWeb.Endpoint,
+config :babiecaq, BabiecaqWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "sXGeidrrQLA7ftqFZp7kQsffNPCeth+cInmvA9APulzCuDgb88NbKHAuvIo0X8L0",
+  secret_key_base: "Vqr/UscvTCxviOd3TI5VeGKoU3ACsiltMvrYIAMZLHcWRFkNN/k0sOH21cABSzD8",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
@@ -53,13 +53,13 @@ config :babieca_gateway, BabiecaGatewayWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :babieca_gateway, BabiecaGatewayWeb.Endpoint,
+config :babiecaq, BabiecaqWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/babieca_gateway_web/(live|views)/.*(ex)$",
-      ~r"lib/babieca_gateway_web/templates/.*(eex)$"
+      ~r"lib/babiecaq_web/(live|views)/.*(ex)$",
+      ~r"lib/babiecaq_web/templates/.*(eex)$"
     ]
   ]
 

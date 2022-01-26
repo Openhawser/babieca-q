@@ -7,15 +7,15 @@
 # General application configuration
 import Config
 
-config :babieca_gateway,
-       ecto_repos: [BabiecaGateway.Repo]
+config :babiecaq,
+  ecto_repos: [Babiecaq.Repo]
 
 # Configures the endpoint
-config :babieca_gateway, BabiecaGatewayWeb.Endpoint,
-       url: [host: "localhost"],
-       render_errors: [view: BabiecaGatewayWeb.ErrorView, accepts: ~w(html json), layout: false],
-       pubsub_server: BabiecaGateway.PubSub,
-       live_view: [signing_salt: "DWrG/YFU"]
+config :babiecaq, BabiecaqWeb.Endpoint,
+  url: [host: "localhost"],
+  render_errors: [view: BabiecaqWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Babiecaq.PubSub,
+  live_view: [signing_salt: "IVL81fad"]
 
 # Configures the mailer
 #
@@ -24,25 +24,25 @@ config :babieca_gateway, BabiecaGatewayWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :babieca_gateway, BabiecaGateway.Mailer, adapter: Swoosh.Adapters.Local
+config :babiecaq, Babiecaq.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
 # Configure esbuild (the version is required)
 config :esbuild,
-       version: "0.13.5",
-       default: [
-         args:
-           ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-         cd: Path.expand("../apps/babieca_gateway/assets", __DIR__),
-         env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-       ]
+  version: "0.13.5",
+  default: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,
-       format: "$time $metadata[$level] $message\n",
-       metadata: [:request_id]
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
