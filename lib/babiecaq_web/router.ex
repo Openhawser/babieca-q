@@ -9,21 +9,31 @@ defmodule BabiecaqWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", BabiecaqWeb do
     pipe_through :browser
-
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", BabiecaqWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", BabiecaqWeb do
+     pipe_through :api
+
+   end
+  scope "/api/producer", BabiecaqWeb do
+    pipe_through :api
+
+    post "/", ProducerController, :create
+  end
+  scope "/api/config", BabiecaqWeb do
+    pipe_through :api
+
+    get "/", ConfigController, :index
+    post "/", ConfigController, :create
+  end
 
   # Enables LiveDashboard only for development
   #

@@ -105,7 +105,7 @@ defmodule Babiecaq.Core.Utilities do
     byte_size = message
                 |> :erlang.term_to_binary()
                 |> :erlang.byte_size()
-    byte_size <= Core.Config.max_bytes_msg
+    byte_size <= Babiecaq.Core.Config.max_bytes_msg
   end
   @doc """
     validate if the message is incorrect

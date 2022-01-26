@@ -2,97 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea4abbb-04c7-404c-8e48-f1bbdab950ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/babiecaq/mailer.ex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/babiecaq/repo.ex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/babiecaq_web/controllers/page_controller.ex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/babiecaq_web/views/page_view.ex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/babiecaq_web/views/error_view_test.exs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/babiecaq_web/views/page_view_test.exs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_helper.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.formatter.exs" beforeDir="false" afterPath="$PROJECT_DIR$/.formatter.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/.formatter.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/assets/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/assets/css/phoenix.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/phoenix.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/assets/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/assets/vendor/topbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/vendor/topbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway/application.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq/application.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway/mailer.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway/repo.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/controllers/config_controller.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/controllers/page_controller.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/controllers/producer_controller.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/endpoint.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/endpoint.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/gettext.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/gettext.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/router.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/router.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/telemetry.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/telemetry.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/templates/hello/index.html.heex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/templates/hello/show.html.heex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/templates/layout/app.html.heex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/templates/layout/app.html.heex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/templates/layout/live.html.heex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/templates/layout/live.html.heex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/templates/layout/root.html.heex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/templates/layout/root.html.heex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/templates/page/index.html.heex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/templates/page/index.html.heex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/views/error_helpers.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/views/error_helpers.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/views/error_view.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/views/error_view.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/views/hello_view.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/views/layout_view.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/views/layout_view.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/lib/babieca_gateway_web/views/page_view.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/mix.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/gettext/en/LC_MESSAGES/errors.po" beforeDir="false" afterPath="$PROJECT_DIR$/priv/gettext/en/LC_MESSAGES/errors.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/gettext/errors.pot" beforeDir="false" afterPath="$PROJECT_DIR$/priv/gettext/errors.pot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/repo/migrations/.formatter.exs" beforeDir="false" afterPath="$PROJECT_DIR$/priv/repo/migrations/.formatter.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/repo/seeds.exs" beforeDir="false" afterPath="$PROJECT_DIR$/priv/repo/seeds.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/static/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/priv/static/favicon.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/static/images/phoenix.png" beforeDir="false" afterPath="$PROJECT_DIR$/priv/static/images/phoenix.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/priv/static/robots.txt" beforeDir="false" afterPath="$PROJECT_DIR$/priv/static/robots.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/babieca_gateway_web/controllers/page_controller_test.exs" beforeDir="false" afterPath="$PROJECT_DIR$/test/babiecaq_web/controllers/page_controller_test.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/babieca_gateway_web/views/error_view_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/babieca_gateway_web/views/layout_view_test.exs" beforeDir="false" afterPath="$PROJECT_DIR$/test/babiecaq_web/views/layout_view_test.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/babieca_gateway_web/views/page_view_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/support/channel_case.ex" beforeDir="false" afterPath="$PROJECT_DIR$/test/support/channel_case.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/support/conn_case.ex" beforeDir="false" afterPath="$PROJECT_DIR$/test/support/conn_case.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/support/data_case.ex" beforeDir="false" afterPath="$PROJECT_DIR$/test/support/data_case.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_gateway/test/test_helper.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/.formatter.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/lib/babieca_q_client.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/mix.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/test/babieca_q_client_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/babieca_q_client/test/test_helper.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/.formatter.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/lib/core.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/lib/core/application.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/lib/core/config.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/lib/core/core_utilities.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/lib/core/message_store.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/lib/core/topic_manager.ex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/mix.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/test/core_config_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/test/core_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/test/core_topic_manager_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/test/core_utilities_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/test/message_store_test.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/core/test/test_helper.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/babieca-q.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/dev.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/dev.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/prod.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/prod.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/runtime.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/runtime.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/test.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/test.exs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/babiecaq_web/controllers/config_controller.ex" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/babiecaq_web/controllers/producer_controller.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/babiecaq/application.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq/application.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/babiecaq/core/application.ex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/babiecaq/core/core_utilities.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq/core/core_utilities.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/babiecaq_web/router.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/babiecaq_web/router.ex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mix.exs" beforeDir="false" afterPath="$PROJECT_DIR$/mix.exs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mix.lock" beforeDir="false" afterPath="$PROJECT_DIR$/mix.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rel/config.exs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rel/plugins/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rel/vm.args" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,44 +81,8 @@
       <recent name="D:\IdeaProjects\babieca-q\apps\core\lib\core" />
     </key>
   </component>
-  <component name="RunManager" selected="Elixir Mix ExUnit.Core Test">
-    <configuration name="Core Test" type="MixExUnitRunConfigurationType" factoryName="Elixir Mix ExUnit" temporary="true">
-      <mix-test>
-        <argument>$PROJECT_DIR$/apps/core/test/</argument>
-      </mix-test>
-      <working-directory url="file://$PROJECT_DIR$/apps/core" />
-      <module-filters inherit-application-module-filters="true" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Mix ExUnit core D:/IdeaProjects/babieca-q/apps/core/test/message_store_test.exs" type="MixExUnitRunConfigurationType" factoryName="Elixir Mix ExUnit" temporary="true">
-      <mix-test>
-        <argument>$PROJECT_DIR$/apps/core/test/message_store_test.exs</argument>
-      </mix-test>
-      <working-directory url="file://$PROJECT_DIR$/apps/core" />
-      <module-filters inherit-application-module-filters="true" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Mix ExUnit core D:/IdeaProjects/babieca-q/apps/core/test/message_store_test.exs:26" type="MixExUnitRunConfigurationType" factoryName="Elixir Mix ExUnit" temporary="true">
-      <mix-test>
-        <argument>$PROJECT_DIR$/apps/core/test/message_store_test.exs:26</argument>
-      </mix-test>
-      <working-directory url="file://$PROJECT_DIR$/apps/core" />
-      <module-filters inherit-application-module-filters="true" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Mix ExUnit core D:/IdeaProjects/babieca-q/apps/core/test/message_store_test.exs:52" type="MixExUnitRunConfigurationType" factoryName="Elixir Mix ExUnit" temporary="true">
-      <mix-test>
-        <argument>$PROJECT_DIR$/apps/core/test/message_store_test.exs:52</argument>
-      </mix-test>
-      <working-directory url="file://$PROJECT_DIR$/apps/core" />
-      <module-filters inherit-application-module-filters="true" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Mix ExUnit utilities D:/IdeaProjects/babieca-q/apps/utilities/test/core_utilities_test.exs" type="MixExUnitRunConfigurationType" factoryName="Elixir Mix ExUnit" temporary="true">
-      <mix-test>
-        <argument>$PROJECT_DIR$/apps/utilities/test/core_utilities_test.exs</argument>
-      </mix-test>
-      <working-directory url="file://$PROJECT_DIR$/apps/utilities" />
+  <component name="RunManager" selected="Elixir Mix ExUnit.test">
+    <configuration name="test" type="MixExUnitRunConfigurationType" factoryName="Elixir Mix ExUnit">
       <module-filters inherit-application-module-filters="true" />
       <method v="2" />
     </configuration>
@@ -209,11 +91,10 @@
       <module-filters inherit-application-module-filters="true" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Elixir Mix ExUnit.Core Test" />
-      </list>
-    </recent_temporary>
+    <list>
+      <item itemvalue="Elixir Mix.Elixir" />
+      <item itemvalue="Elixir Mix ExUnit.test" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -265,7 +146,7 @@
       <workItem from="1643104175617" duration="14264000" />
       <workItem from="1643139482415" duration="841000" />
       <workItem from="1643146033959" duration="6616000" />
-      <workItem from="1643186998869" duration="835000" />
+      <workItem from="1643186998869" duration="2738000" />
     </task>
     <servers />
   </component>

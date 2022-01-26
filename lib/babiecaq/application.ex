@@ -15,9 +15,13 @@ defmodule Babiecaq.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Babiecaq.PubSub},
       # Start the Endpoint (http/https)
-      BabiecaqWeb.Endpoint
-      #
-      Core.start_link
+      BabiecaqWeb.Endpoint,
+      # Core of Babieca
+      %{
+        id: BabiecaqCore,
+        start: {Babiecaq.Core, :start_link, []},
+        type: :supervisor
+      }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
