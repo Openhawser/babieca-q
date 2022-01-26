@@ -20,19 +20,20 @@ defmodule BabiecaqWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api", BabiecaqWeb do
-     pipe_through :api
+    pipe_through :api
 
-   end
+  end
   scope "/api/producer", BabiecaqWeb do
     pipe_through :api
 
     post "/", ProducerController, :create
   end
-  scope "/api/config", BabiecaqWeb do
+  scope "/api/config/topic", BabiecaqWeb do
     pipe_through :api
 
     get "/", ConfigController, :index
     post "/", ConfigController, :create
+    delete "/:topic_name", ConfigController, :delete
   end
 
   # Enables LiveDashboard only for development

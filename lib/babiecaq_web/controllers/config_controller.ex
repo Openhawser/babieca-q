@@ -1,16 +1,21 @@
 defmodule BabiecaqWeb.ConfigController do
   use BabiecaqWeb, :controller
+  alias BabiecaqWeb.Controllers.Utils
+
 
   def index(conn, _params) do
-    json(conn, GenServer.call(:BabiecaQ, {:topic_list}))
+    json(conn, GenServer.call(:BabiecaQCore, {:topic_list}))
   end
 
   def create(conn, %{"topic_name" => topic_name}) do
-    case GenServer.call(:BabiecaQ, {:create_topic, topic_name}) do
-      {:ok, value} -> json(conn, %{status: "ok", info: value})
-      {:error, value} -> json(conn, %{status: "error", info: value})
-    end
-
+    Utils.json_response(conn, GenServer.call(:BabiecaQCore, {:create_topic, topic_name}))
   end
+
+  def delete(conn, %{"topic_name" => topic_name}) do
+    Utils.json_response(conn, GenServer.call(:BabiecaQCore, {:delete_topic, topic_name}))
+  end
+
+
+
 
 end

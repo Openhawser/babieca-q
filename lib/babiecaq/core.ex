@@ -10,7 +10,7 @@ defmodule Babiecaq.Core do
   @name __MODULE__
 
   def start_link(state \\ []) do
-    GenServer.start_link(@name, state, name: :BabiecaQ)
+    GenServer.start_link(@name, state, name: :BabiecaQCore)
   end
 
 
