@@ -127,15 +127,21 @@ defmodule Babiecaq.Core.TopicManager do
 
   @spec topic_list() :: [String.t()]
   def topic_list() do
-    :ets.all()
-    |> Enum.filter(
-         fn x ->
-           is_atom(x) and String.starts_with?(to_string(x), "babieca-topic") and not (
-             String.ends_with?(to_string(x), "-messages"))
-         end
-       )
-    |> Enum.map(fn x -> String.replace(to_string(x), "babieca-topic-", "") end)
-
+    try do
+      {
+        :ok,
+        :ets.all()
+        |> Enum.filter(
+             fn x ->
+               is_atom(x) and String.starts_with?(to_string(x), "babieca-topic") and not (
+                 String.ends_with?(to_string(x), "-messages"))
+             end
+           )
+        |> Enum.map(fn x -> String.replace(to_string(x), "babieca-topic-", "") end)
+      }
+    rescue
+      e -> {:error, inspect(e)}
+    end
   end
 
   @doc """
@@ -170,6 +176,22 @@ defmodule Babiecaq.Core.TopicManager do
         )
         {:ok, "The user: #{user_name} has been added in topic #{topic_name}"}
       end
+    else
+      {:error, "Not exist topic"}
+    end
+  end
+
+  @spec user_list(String.t()) :: [String.t()]
+  def user_list(topic_name) do
+    if exist_topic?(topic_name) do
+      {
+        :ok,
+        topic_name
+        |> Utilities.key_topic_name()
+        |> :ets.tab2list()
+        |> Enum.map(fn {key, _} -> to_string(key) end)
+      }
+
     else
       {:error, "Not exist topic"}
     end
@@ -227,7 +249,6 @@ defmodule Babiecaq.Core.TopicManager do
     else
       {:error, "Topic: #{topic_name} not exist"}
     end
-
   end
 
 end

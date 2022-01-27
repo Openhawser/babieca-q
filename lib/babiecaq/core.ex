@@ -13,7 +13,6 @@ defmodule Babiecaq.Core do
     GenServer.start_link(@name, state, name: :BabiecaQCore)
   end
 
-
   def init(init_arg) do
     {:ok, init_arg}
   end
@@ -51,6 +50,10 @@ defmodule Babiecaq.Core do
 
   def handle_call({:topic_list}, _from, state) do
     {:reply, TopicManager.topic_list(), state}
+  end
+
+  def handle_call({:user_list, topic_name}, _from, state) do
+    {:reply, TopicManager.user_list(topic_name), state}
   end
 
 end

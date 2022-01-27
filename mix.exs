@@ -53,6 +53,8 @@ defmodule Babiecaq.MixProject do
       {:credo, "~> 1.6.2", only: [:dev, :test], runtime: false},
       {:earmark, "~> 1.4.20", only: :dev},
       {:ex_doc, "~> 0.26", only: :dev},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"}
     ]
   end
 

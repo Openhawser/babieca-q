@@ -47,6 +47,18 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+
+#Swagger config
+config :babiecaq, :phoenix_swagger,
+       swagger_files: %{
+         "priv/static/swagger.json" => [
+           router: BabiecaqWeb.Router,     # phoenix routes will be converted to swagger paths
+           endpoint: BabiecaqWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+         ]
+       }
+
+config :phoenix_swagger, json_library: Jason # If you dont use Poison
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
