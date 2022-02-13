@@ -34,6 +34,8 @@ defmodule BabiecaqWeb.Router do
     post "/", ConfigController, :create
     delete "/:topic_name", ConfigController, :delete
     delete "/:topic_name/messages", MessagesController, :delete
+    post "/:topic_name/messages", MessagesController, :create
+    get "/:topic_name/messages/:user_name", MessagesController, :get
     get "/:topic_name/user", UserController, :index
     post "/:topic_name/user", UserController, :create
   end
@@ -97,7 +99,7 @@ defmodule BabiecaqWeb.Router do
       produces: ["application/json"],
       tags: [
         %{name: "Config Topic", description: "Resources to Config topic"},
-        %{name: "Config Messages", description: "Resources to Config messages of topic"},
+        %{name: "Messages", description: "Resources to messages in topic"},
       ]
     }
   end

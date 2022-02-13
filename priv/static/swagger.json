@@ -112,7 +112,73 @@
         },
         "summary": "Delete messages of Topic",
         "tags": [
-          "Config Messages"
+          "Messages"
+        ]
+      },
+      "post": {
+        "description": "Add messages of Topic by topic_name",
+        "operationId": "BabiecaqWeb.MessagesController.create",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "message to insert in the topic ",
+            "in": "query",
+            "name": "message",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{info: The messages of topic {topic_name} has been delete, status: ok}"
+          },
+          "404": {
+            "description": "{info: User: {user_name} not exist, status: error} or {info: Topic: {topic_name} not exist, status: error}"
+          }
+        },
+        "summary": "Add message of Topic",
+        "tags": [
+          "Messages"
+        ]
+      }
+    },
+    "/api/config/topic/{topic_name}/messages/{user_name}": {
+      "get": {
+        "description": "Get messages of Topic by topic_name",
+        "operationId": "BabiecaqWeb.MessagesController.get",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "name of user",
+            "in": "path",
+            "name": "user_name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{status: ok, info: message}"
+          },
+          "404": {
+            "description": "{status: error, info: User: {user_name} not exist or info: Topic: {topic_name} not exist}"
+          }
+        },
+        "summary": "Get message of Topic",
+        "tags": [
+          "Messages"
         ]
       }
     },
@@ -197,8 +263,8 @@
       "name": "Config Topic"
     },
     {
-      "description": "Resources to Config messages of topic",
-      "name": "Config Messages"
+      "description": "Resources to messages in topic",
+      "name": "Messages"
     }
   ]
 }
