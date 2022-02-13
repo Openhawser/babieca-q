@@ -1,0 +1,270 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {},
+  "host": "localhost:4000",
+  "info": {
+    "contact": {
+      "email": "perfecto.vidal.lloret@gmail.com",
+      "name": "Perfecto Vidal Lloret"
+    },
+    "description": "API Documentation for BabiecaQ",
+    "termsOfService": "Open for public",
+    "title": "BabiecaQ",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/config/topic": {
+      "get": {
+        "description": "List of topics",
+        "operationId": "BabiecaqWeb.ConfigController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "{status: ok, info: [ topic1, topic2..] }"
+          },
+          "400": {
+            "description": "{status: error, info: Error info}"
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Config Topic"
+        ]
+      },
+      "post": {
+        "description": "Create topic",
+        "operationId": "BabiecaqWeb.ConfigController.create",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "query",
+            "name": "topic_name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "{info: The Topic {topic_name} has been create,status: ok}"
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Config Topic"
+        ]
+      }
+    },
+    "/api/config/topic/{topic_name}": {
+      "delete": {
+        "description": "Delete a Topic by topic_name",
+        "operationId": "BabiecaqWeb.ConfigController.delete",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "203": {
+            "description": "{info: Topic: {topic_name} has been deleted, status: ok}"
+          },
+          "404": {
+            "description": "{info: Topic: {topic_name} not exist, status: error}"
+          }
+        },
+        "summary": "Delete Topic",
+        "tags": [
+          "Config Topic"
+        ]
+      }
+    },
+    "/api/config/topic/{topic_name}/messages": {
+      "delete": {
+        "description": "Delete all messages of Topic by topic_name",
+        "operationId": "BabiecaqWeb.MessagesController.delete",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "203": {
+            "description": "{info: The messages of topic {topic_name} has been delete, status: ok}"
+          },
+          "404": {
+            "description": "{info: Topic: {topic_name} not exist, status: error}"
+          }
+        },
+        "summary": "Delete messages of Topic",
+        "tags": [
+          "Messages"
+        ]
+      },
+      "post": {
+        "description": "Add messages of Topic by topic_name",
+        "operationId": "BabiecaqWeb.MessagesController.create",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "message to insert in the topic ",
+            "in": "query",
+            "name": "message",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{info: The messages of topic {topic_name} has been delete, status: ok}"
+          },
+          "404": {
+            "description": "{info: User: {user_name} not exist, status: error} or {info: Topic: {topic_name} not exist, status: error}"
+          }
+        },
+        "summary": "Add message of Topic",
+        "tags": [
+          "Messages"
+        ]
+      }
+    },
+    "/api/config/topic/{topic_name}/messages/{user_name}": {
+      "get": {
+        "description": "Get messages of Topic by topic_name",
+        "operationId": "BabiecaqWeb.MessagesController.get",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "name of user",
+            "in": "path",
+            "name": "user_name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{status: ok, info: message}"
+          },
+          "404": {
+            "description": "{status: error, info: User: {user_name} not exist or info: Topic: {topic_name} not exist}"
+          }
+        },
+        "summary": "Get message of Topic",
+        "tags": [
+          "Messages"
+        ]
+      }
+    },
+    "/api/config/topic/{topic_name}/user": {
+      "get": {
+        "description": "List of user in topic",
+        "operationId": "BabiecaqWeb.UserController.index",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "{status: ok, info: [ user1, user2..] }"
+          },
+          "400": {
+            "description": "{info: Topic: {topic_name} not exist, status: error}"
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Config Topic"
+        ]
+      },
+      "post": {
+        "description": "Create user in the topic",
+        "operationId": "BabiecaqWeb.UserController.create",
+        "parameters": [
+          {
+            "description": "name of topic",
+            "in": "path",
+            "name": "topic_name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "name of user",
+            "in": "query",
+            "name": "user_name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "{status: ok, info: The user: {user_name} has been added in topic {topic_name}}"
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Config Topic"
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "description": "API Token must be provided via `Authorization: Bearer ` header",
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0",
+  "tags": [
+    {
+      "description": "Resources to Config topic",
+      "name": "Config Topic"
+    },
+    {
+      "description": "Resources to messages in topic",
+      "name": "Messages"
+    }
+  ]
+}
